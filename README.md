@@ -4,9 +4,9 @@
  * @Descripttion: 授人以渔，功德无量，利在千秋
  * @Date: 2022-04-14 20:10:18
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2025-05-03 20:27:45
+ * @LastEditTime: 2025-05-03 20:37:26
 -->
-# Geeker-Admin
+# ChatRoom-App
 
 ### 简介 📖
 
@@ -34,13 +34,13 @@ Vue3 + TypeScript + Vite6 + AntDesignVue + Pinia3 + Socket.IO
 - 获取项目代码
 
 ```bash
-git clone https://github.com/zeromorphis/vue-app.git
+git clone https://github.com/zeromorphis/vue-chatroom-app.git
 ```
 
 - 安装依赖
 
 ```bash
-cd vue-app
+cd vue-chatroom-app
 
 yarn install 或 npm install
 
@@ -122,8 +122,8 @@ vue-chatroom-app
 
 |                                        微信                                        |                                       支付宝                                       |
 | :--------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------: |
-| <img src="https://i.imgtg.com/2023/01/16/QRzBX.png" alt="Alipay QRcode" width=170> | <img src="https://i.imgtg.com/2023/01/16/QRFZt.png" alt="Wechat QRcode" width=170> |
+| <img src="https://i.miji.bid/2025/05/03/005c3cf7fcb014d74c5c27da05817def.jpeg" alt="Alipay QRcode" width=170> | <img src="https://i.miji.bid/2025/05/03/d56166261b20395226d129fe2f54505e.jpeg" alt="Wechat QRcode" width=170> |
 
-### 维护者
+### 维护者 👨‍👨‍👦‍👦
 
 [@言棠](https://github.com/zeromorphis)
