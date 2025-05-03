@@ -1,7 +1,8 @@
 {
-    "name": "vue3-chatroom",
+    "name": "vue-app",
     "private": true,
-    "version": "6.0.0",
+    "version": "3.0.0",
+    "description": "vue3 + vite6 + ts + antdv + pinia3",
     "author": {
         "name": "言棠",
         "email": "zeromorphis@gmail.com"

@@ -4,7 +4,7 @@
  * @Descripttion: 授人以渔，功德无量，利在千秋
  * @Date: 2022-04-14 20:10:18
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2025-05-03 17:57:22
+ * @LastEditTime: 2025-05-03 19:28:09
 -->
 ## 简介
 
@@ -32,13 +32,13 @@ Vue3 + TypeScript + Vite6 + AntDesignVue + Pinia3 + Socket.IO
 - 获取项目代码
 
 ```bash
-git clone https://github.com/zeromorphis/vue3-chatroom.git
+git clone https://github.com/zeromorphis/vue-app.git
 ```
 
 - 安装依赖
 
 ```bash
-cd vue3-chatroom
+cd vue-app
 
 yarn install 或 npm install
 
