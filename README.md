@@ -4,7 +4,7 @@
  * @Descripttion: 授人以渔，功德无量，利在千秋
  * @Date: 2022-04-14 20:10:18
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2025-05-03 20:37:26
+ * @LastEditTime: 2025-05-03 20:47:43
 -->
 # ChatRoom-App
 
@@ -63,7 +63,7 @@ yarn build  或 npm run build
 ```text
 vue-chatroom-app
 ├─ build                   # Vite 配置项
-├─ public                  # 静态资源文件（该文件夹不会被打包）
+├─ public                  # 静态资源文件
 ├─ src
 │  ├─ api                  # API 接口管理
 │  ├─ assets               # 静态资源文件
@@ -95,7 +95,7 @@ vue-chatroom-app
 ├─ tsconfig.json           # typescript 全局配置
 ├─ tsconfig.node.json      # node 环境配置
 ├─ vite.config.ts          # vite 全局配置文件
-└─ vite.config.ts          # yarn 锁文件
+└─ yarn.lock               # yarn 锁文件
 ```
 
 ### 浏览器支持 🌎
