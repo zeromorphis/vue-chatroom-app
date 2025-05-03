@@ -4,18 +4,20 @@
  * @Descripttion: 授人以渔，功德无量，利在千秋
  * @Date: 2022-04-14 20:10:18
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2025-05-03 19:28:09
+ * @LastEditTime: 2025-05-03 20:27:45
 -->
-## 简介
+# Geeker-Admin
+
+### 简介 📖
 
 Vue3 + TypeScript + Vite6 + AntDesignVue + Pinia3 + Socket.IO
 
-## 特性
+### 特性 ⭐
 
 - **最新技术栈**：使用 Vue3/Vite6 等前端前沿技术开发
 - **TypeScript**: 应用程序级 JavaScript 的语言
 
-## 准备
+### 准备 🔨
 
 - [Node](http://nodejs.org/) - 项目开发环境
 - [Vite](https://vitejs.dev/) - 熟悉 Vite6 特性
@@ -27,7 +29,7 @@ Vue3 + TypeScript + Vite6 + AntDesignVue + Pinia3 + Socket.IO
 - [Ant-Design-Vue](https://www.antdv.com) - Ant-Design-Vue 基本使用
 - [Socket.IO](https://socket.io/zh-CN/) - Socket.IO 基本使用
 
-## 安装使用
+### 安装使用 📔
 
 - 获取项目代码
 
@@ -55,10 +57,6 @@ yarn serve  或 npm run dev
 ```bash
 yarn build  或 npm run build 
 ```
-
-## 维护者
-
-[@言棠](https://github.com/zeromorphis)
 
 ### 文件资源目录 📚
 
@@ -111,18 +109,9 @@ vue-chatroom-app
 
 ### 项目后台接口 🧩
 
-项目后台接口完全采用 Mock 数据，感谢以下 Mock 平台支持：
+项目后台接口采用nestjs服务：
 
-- FastMock： https://www.fastmock.site
-- EasyMock：https://mock.mengxuegu.com
-
-### 微信交流群 👨‍👨‍👦‍👦
-
-微信一群、二群、三群、四群已满，加作者微信进入五群（支持知识付费）🤪
-
-|                                               微信二维码                                                |
-| :-----------------------------------------------------------------------------------------------------: |
-| <img src="https://pic.ziyuan.wang/user/guest/2024/02/WX20240228-162952@2x_d164375fc0c16.png" width=170> |
+- server address： https://github.com/zeromorphis/nestjs-chatroom-server.git
 
 ### 捐赠 🍵
 
@@ -134,3 +123,7 @@ vue-chatroom-app
 |                                        微信                                        |                                       支付宝                                       |
 | :--------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------: |
 | <img src="https://i.imgtg.com/2023/01/16/QRzBX.png" alt="Alipay QRcode" width=170> | <img src="https://i.imgtg.com/2023/01/16/QRFZt.png" alt="Wechat QRcode" width=170> |
+
+### 维护者
+
+[@言棠](https://github.com/zeromorphis)
