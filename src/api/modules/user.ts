@@ -1,10 +1,9 @@
 /*
- * @Descripttion: 给你两窝窝
- * @version: 5.0.0
  * @Author: 言棠
- * @Date: 2022-11-29 10:35:42
- * @LastEditors: 言棠
- * @LastEditTime: 2022-11-29 11:07:53
+ * @version: 1024
+ * @Descripttion: 当时只道是寻常
+ * @Date: 2024-03-25 15:42:29
+ * @LastEditTime: 2025-05-03 16:20:13
  */
 import http from "@/api";
 import { PORT1 } from "@/api/config/servicePort";

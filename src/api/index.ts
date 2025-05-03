@@ -1,18 +1,4 @@
-/*
- * @Descripttion: 授人以渔，功德无量，利在千秋
- * @version: 4.0.0
- * @Author: 言棠
- * @Date: 2022-09-15 15:28:17
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2025-05-02 19:52:10
- */
-import axios, {
-  AxiosInstance,
-  AxiosError,
-  AxiosRequestConfig,
-  InternalAxiosRequestConfig,
-  AxiosResponse,
-} from "axios";
+import axios, { AxiosInstance, AxiosError, AxiosRequestConfig, InternalAxiosRequestConfig, AxiosResponse } from "axios";
 import { AxiosCanceler } from "./helper/axiosCancel";
 import { ResultData } from "@/api/interface";
 import { checkStatus } from "./helper/checkStatus";
@@ -51,8 +37,7 @@ class RequestHttp {
      * 客户端发送请求 -> [请求拦截器] -> 服务器
      * token校验(JWT) : 接受服务器返回的token,存储到vuex/pinia/本地储存当中
      */
-    this.service.interceptors.request.use(
-      (config: AxiosRequestConfig) => {
+    this.service.interceptors.request.use((config: AxiosRequestConfig) => {
         const userStore = useUserStoreWithOut();
         // * 将当前请求添加到 pending 中
         // 重复请求不需要取消，在 api 服务中通过指定的第三个参数: { cancel: false } 来控制
@@ -73,8 +58,7 @@ class RequestHttp {
      * @description 响应拦截器
      *  服务器换返回信息 -> [拦截统一处理] -> 客户端JS获取到信息
      */
-    this.service.interceptors.response.use(
-      (response: AxiosResponse & { config: CustomAxiosRequestConfig }) => {
+    this.service.interceptors.response.use((response: AxiosResponse & { config: CustomAxiosRequestConfig }) => {
         const useUserStore = useUserStoreWithOut();
         const useChatStore = useChatStoreWithOut();
         const useGlobalStore = useGlobalStoreWithOut();

@@ -70,10 +70,10 @@ router.beforeEach(async (to: any, from: any, next: any) => {
   // 设置页面标题
   const title = import.meta.env.VITE_GLOB_APP_TITLE;
   document.title = to.meta.title ? `${to.meta.title} - ${title}` : title;
-  const useUserStore = useUserStoreWithOut();
-  const useChatStore = useChatStoreWithOut();
-  const useGlobalStore = useGlobalStoreWithOut();
-  const hasToken = useUserStore.hasToken;
+  const userStore = useUserStoreWithOut();
+  const chatStore = useChatStoreWithOut();
+  const globalStore = useGlobalStoreWithOut();
+  const hasToken = userStore.hasToken;
   if (hasToken) {
     if (to.path === LOGIN_URL) {
       next({ path: '/' });
@@ -83,9 +83,9 @@ router.beforeEach(async (to: any, from: any, next: any) => {
     }
   } else {
     // 删除令牌及用户缓存并转到登录页面重新登录
-    await useUserStore.$reset();
-    await useChatStore.$reset();
-    await useGlobalStore.$reset();
+    await userStore.$reset();
+    await chatStore.$reset();
+    await globalStore.$reset();
     if (ROUTER_WHITE_LIST.includes(to.path)) {
       next();
     } else {

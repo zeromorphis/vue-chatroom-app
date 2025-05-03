@@ -1,9 +1,9 @@
 <!--
  * @version: 3.0.0
  * @Date: 2022-12-02 21:12:26
- * @LastEditors: 言棠
+ * @LastEditors: Please set LastEditors
  * @Descripttion: 人人都说顶峰相见，路边的水沟人满为患
- * @LastEditTime: 2023-10-22 18:15:59
+ * @LastEditTime: 2025-05-03 16:21:06
  * @FilePath: /dev/vue3-chat-antd/src/components/ThemeSetting/ThemeDrawer.vue
 -->
 <template>
@@ -39,7 +39,6 @@ import { useTheme } from "@/hooks/useTheme";
 import { useGlobalStoreWithOut } from '@/store/modules/global';
 import mittBus from "@/utils/mittBus";
 import SwitchDark from "@/components/SwitchDark/index.vue";
-import { DEFAULT_PRIMARY } from "@/config/config";
 import { ConfigProvider } from 'ant-design-vue';
 
 const { changePrimary, changeGreyOrWeak } = useTheme();

@@ -1,10 +1,9 @@
 /*
- * @Descripttion: 授人以渔，功德无量，利在千秋
- * @version: 4.0.0
  * @Author: 言棠
- * @Date: 2022-08-10 18:05:08
- * @LastEditors: 言棠
- * @LastEditTime: 2022-09-15 15:13:30
+ * @version: 1024
+ * @Descripttion: 当时只道是寻常
+ * @Date: 2024-03-25 15:42:29
+ * @LastEditTime: 2025-05-03 16:24:32
  */
 import type { App } from "vue";
 import { createPinia } from "pinia";

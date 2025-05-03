@@ -1,12 +1,4 @@
-/*
- * @Descripttion: 授人以渔，功德无量，利在千秋
- * @version: 4.0.0
- * @Author: 言棠
- * @Date: 2022-09-15 17:43:59
- * @LastEditors: 言棠
- * @LastEditTime: 2022-09-15 20:39:37
- */
-import { RouteRecordRaw } from "vue-router";
+import type { RouteRecordRaw } from "vue-router";
 
 // 错误页面模块
 const errorRouter: Array<RouteRecordRaw> = [
