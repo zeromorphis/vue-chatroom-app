@@ -4,7 +4,7 @@
  * @Descripttion: 授人以渔，功德无量，利在千秋
  * @Date: 2022-04-14 20:10:18
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2025-05-03 15:21:35
+ * @LastEditTime: 2025-05-03 17:57:22
 -->
 ## 简介
 
@@ -17,12 +17,12 @@ Vue3 + TypeScript + Vite6 + AntDesignVue + Pinia3 + Socket.IO
 
 ## 准备
 
-- [node](http://nodejs.org/) 和 [git](https://git-scm.com/) -项目开发环境
-- [Vite](https://vitejs.dev/) - 熟悉 vite 特性
-- [Vue3](https://v3.vuejs.org/) - 熟悉 Vue 基础语法
-- [TypeScript](https://www.typescriptlang.org/) - 熟悉`TypeScript`基本语法
-- [ES6+](http://es6.ruanyifeng.com/) - 熟悉 es6 基本语法
+- [Node](http://nodejs.org/) - 项目开发环境
+- [Vite](https://vitejs.dev/) - 熟悉 Vite6 特性
+- [Vue3](https://v3.vuejs.org/) - 熟悉 Vue3 基础语法
 - [Vue-Router-Next](https://next.router.vuejs.org/) - 熟悉 vue-router 基本使用
+- [TypeScript](https://www.typescriptlang.org/) - 熟悉 TypeScript 基本语法
+- [ES6+](http://es6.ruanyifeng.com/) - 熟悉 ES6 基本语法
 - [Pinia](https://pinia.vuejs.org/) - Pinia 基本使用
 - [Ant-Design-Vue](https://www.antdv.com) - Ant-Design-Vue 基本使用
 - [Socket.IO](https://socket.io/zh-CN/) - Socket.IO 基本使用
