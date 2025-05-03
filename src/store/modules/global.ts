@@ -3,8 +3,8 @@
  * @version: 3.0.0
  * @Descripttion: 授人以渔，功德无量，利在千秋
  * @Date: 2022-04-14 20:56:23
- * @LastEditors: 言棠
- * @LastEditTime: 2022-12-09 15:26:43
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2025-05-03 17:12:43
  */
 import { defineStore } from "pinia";
 import { store } from "@/store";
@@ -30,6 +30,8 @@ export const useGlobalStore = defineStore("global", {
         isGrey: false,
         // 色弱模式
         isWeak: false,
+        // 页面水印
+        watermark: false,
       },
     };
   },
@@ -50,7 +52,7 @@ export const useGlobalStore = defineStore("global", {
       this.themeConfig = themeConfig;
     },
   },
-  persist: piniaPersistConfig("GlobalState"),
+  persist: piniaPersistConfig("globalState"),
 });
 
 export function useGlobalStoreWithOut() {

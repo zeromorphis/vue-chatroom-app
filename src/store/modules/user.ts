@@ -4,7 +4,7 @@
  * @Descripttion: 授人以渔，功德无量，利在千秋
  * @Date: 2022-04-14 20:56:23
  * @LastEditors: Please set LastEditors
- * @LastEditTime: 2025-05-02 19:46:36
+ * @LastEditTime: 2025-05-03 17:13:10
  */
 import { defineStore } from "pinia";
 import { store } from "@/store";
@@ -70,7 +70,7 @@ export const useUserStore = defineStore("user", {
       }
     },
   },
-  persist: piniaPersistConfig("UserState"),
+  persist: piniaPersistConfig("userState"),
 });
 
 export function useUserStoreWithOut() {

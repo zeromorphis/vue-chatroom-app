@@ -3,21 +3,23 @@
  * @version: 4.0.0
  * @Author: 言棠
  * @Date: 2022-08-19 18:35:07
- * @LastEditors: 言棠
- * @LastEditTime: 2022-12-15 17:53:01
+ * @LastEditors: Please set LastEditors
+ * @LastEditTime: 2025-05-03 17:08:13
 -->
 <template>
   <a-config-provider :locale="locale">
     <router-view @mouseover="updateLastTime()" @click="updateLastTime()" v-slot="{ Component }">
-      <keep-alive :include="cacheRouter">
-        <component :is="Component" />
-      </keep-alive>
+      <a-watermark id="watermark" :font="font" :content="themeConfig.watermark ? ['言棠', '版权所有'] : ''">
+        <keep-alive :include="cacheRouter">
+          <component :is="Component" />
+        </keep-alive>
+      </a-watermark>
     </router-view>
   </a-config-provider>
 </template>
 
 <script lang="ts">
-import { onBeforeMount, watch, provide, defineComponent } from "vue";
+import { onBeforeMount, reactive, computed, watch, provide, defineComponent } from "vue";
 import * as echarts from "echarts";
 import { useRouter } from "vue-router";
 import cacheRouter from "@/router/cacheRouter";
@@ -34,26 +36,28 @@ export default defineComponent({
     provide("echarts", echarts);
     const router = useRouter();
     const { locale } = useAntdI18n();
-    const useUserStore = useUserStoreWithOut();
-    const useChatStore = useChatStoreWithOut();
-    const useGlobalStore = useGlobalStoreWithOut();
+    const userStore = useUserStoreWithOut();
+    const chatStore = useChatStoreWithOut();
+    const globalStore = useGlobalStoreWithOut();
+    const themeConfig = computed(() => globalStore.themeConfig);
+    const font = reactive({ color: "rgba(0, 0, 0, .15)" });
 
     // 更新用户的最后操作时间
     const updateLastTime = () => {
-      useGlobalStore.SET_LASTTIME(new Date().getTime());
+      globalStore.SET_LASTTIME(new Date().getTime());
     }
 
     // 背景图变更重新存储
-    watch(() => useGlobalStore.background, (newVal, oldVal) => {
+    watch(() => globalStore.background, (newVal, oldVal) => {
       if (!newVal || !newVal.trim().length) {
-        useGlobalStore.SET_BACKGROUND(DEFAULT_BACKGROUND);
+        globalStore.SET_BACKGROUND(DEFAULT_BACKGROUND);
       }
     }, { immediate: true, deep: true }); // 开启深度监听
 
     // 判断是否超时
     const isTimeOut = () => {
       // 页面上一次的点击时间
-      let lastTime: number = useGlobalStore.lastTime;
+      let lastTime: number = globalStore.lastTime;
       let currentTime: number = new Date().getTime();
       let sys_timeout: number = 20 * 60 * 1000;// 超时时间, 如果20分钟都没有点击页面就算超时
       // 超时了
@@ -69,9 +73,9 @@ export default defineComponent({
       setInterval(async () => {
         // 判断一下是否超时，如果超时了就退出
         if (isTimeOut()) {
-          await useUserStore.$reset();
-          await useChatStore.$reset();
-          await useGlobalStore.$reset();
+          await userStore.$reset();
+          await chatStore.$reset();
+          await globalStore.$reset();
           router.push({ path: LOGIN_URL });
         }
       }, 2000);
@@ -79,13 +83,15 @@ export default defineComponent({
 
     onBeforeMount(() => {
       isLoginOut();//是否超时
-      useGlobalStore.SET_MOBILE(isMobile());
+      globalStore.SET_MOBILE(isMobile());
     });
 
     return {
       locale,
       cacheRouter,
       updateLastTime,
+      themeConfig,
+      font,
     };
   },
 });

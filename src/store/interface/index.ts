@@ -12,6 +12,7 @@ export interface ThemeConfigProps {
 	primary: string;
 	isGrey: boolean;
 	isWeak: boolean;
+	watermark: boolean;
 }
 
 /* GlobalState */

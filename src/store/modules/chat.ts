@@ -435,7 +435,7 @@ export const useChatStore = defineStore("chat", {
       });
     },
   },
-  persist: piniaPersistConfig("ChatState"),
+  persist: piniaPersistConfig("chatState"),
 });
 
 export function useChatStoreWithOut() {

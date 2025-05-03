@@ -1,18 +1,6 @@
-<!--
- * @version: 3.0.0
- * @Date: 2022-12-02 21:12:26
- * @LastEditors: Please set LastEditors
- * @Descripttion: 人人都说顶峰相见，路边的水沟人满为患
- * @LastEditTime: 2025-05-03 16:21:06
- * @FilePath: /dev/vue3-chat-antd/src/components/ThemeSetting/ThemeDrawer.vue
--->
 <template>
   <div v-if="drawerVisible">
-    <a-drawer v-model:open="drawerVisible" placement="right" title="布局设置">
-      <!-- 全局主题 -->
-      <a-divider class="divider" orientation="center">
-        全局主题
-      </a-divider>
+    <a-drawer v-model:open="drawerVisible" placement="right" title="基本设置">
       <div class="theme-item">
         <span>主题颜色</span>
         <input type="color" :value="themeConfig.primary" @input="e => onColorChange(e)" />
@@ -29,6 +17,10 @@
         <span>色弱模式</span>
         <a-switch v-model:checked="themeConfig.isWeak" @change="changeGreyOrWeak($event, 'weak')" />
       </div>
+      <div class="theme-item">
+        <span>全局水印</span>
+        <a-switch v-model:checked="themeConfig.watermark"  />
+      </div>
     </a-drawer>
   </div>
 </template>
@@ -43,8 +35,8 @@ import { ConfigProvider } from 'ant-design-vue';
 
 const { changePrimary, changeGreyOrWeak } = useTheme();
 
-const useGlobalStore = useGlobalStoreWithOut();
-const themeConfig = computed(() => useGlobalStore.themeConfig);
+const globalStore = useGlobalStoreWithOut();
+const themeConfig = computed(() => globalStore.themeConfig);
 
 // 切换布主题颜色
 const onColorChange = (e: any) => {
@@ -68,9 +60,6 @@ mittBus.on("openThemeDrawer", () => {
 </script>
 
 <style scoped lang="scss">
-.divider {
-  margin: 0 !important;
-}
 .theme-item {
   display: flex;
   align-items: center;
