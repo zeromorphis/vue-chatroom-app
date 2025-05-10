@@ -1,5 +1,5 @@
 @use '@/styles/reset.scss'; // 重写标签默认样式
 @use '@/styles/common.scss'; // 公共样式
-@use '@/styles/font.css'; // 外部字体样式
+@use '@/assets/fonts/font.scss'; // 外部字体样式
 @use 'animate.css'; // animate动画库
 @use 'normalize.css'; // 样式上提供了跨浏览器的高度一致性

@@ -2,7 +2,7 @@
   <div class="active_container">
     <div v-if="type === 'group'">
       <team-outlined @click="() => (showGroupUser = !showGroupUser)" class="active-button" :class="{ heightLight: showGroupUser }" />
-      <a-drawer class="acitve-drawer" placement="right" :closable="false" v-model:open="showGroupUser" :getContainer="getElement()" @close="showGroupUser = false " width='50%' style="position: absolute">
+      <a-drawer class="acitve-drawer" placement="right" :closable="false" v-model:open="showGroupUser" :getContainer="getElement()" @close="showGroupUser = false " width='30%' style="position: absolute">
         <div class="active-content" v-if="activeGroupUser[activeRoom.groupId]">
           <div class="actiev-content-title">群聊管理</div>
           <div class="actiev-content-box-wrap">
@@ -111,13 +111,11 @@ export default defineComponent({
 }
 // 抽屉组件重写样式
 .acitve-drawer {
-  .ant-drawer-content-wrapper {
+  .ant-drawer-wrapper-body {
     background-color: rgba(54, 50, 50, 0.5) !important;
 
-    .ant-drawer-content {
+    .ant-drawer-body {
       background-color: rgba(0, 0, 0, 0.5) !important;
-
-      .ant-drawer-body {
         padding: 0 !important;
 
         // 在线人数部分
@@ -165,6 +163,7 @@ export default defineComponent({
               width: 100%;
               height: 40px;
               padding: 6px 12px;
+              background-color: #DBA40E;
 
               .active-content-out {
                 width: 100%;
@@ -174,7 +173,6 @@ export default defineComponent({
           }
         }
       }
-    }
   }
 }
 </style>

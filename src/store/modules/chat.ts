@@ -3,8 +3,8 @@
  * @version: 3.0.0
  * @Descripttion: 授人以渔，功德无量，利在千秋
  * @Date: 2022-04-14 20:56:23
- * @LastEditors: 言棠
- * @LastEditTime: 2022-12-09 14:45:37
+ * @LastEditors: YT
+ * @LastEditTime: 2025-05-10 18:30:39
  */
 import { defineStore } from "pinia";
 import { store } from "@/store";
@@ -129,11 +129,12 @@ export const useChatStore = defineStore("chat", {
     async connectSocket() {
       const useUserStore = useUserStoreWithOut();
       let userinfo = useUserStore.userinfo;
-      let socket: SocketIOClient.Socket = io(
-        (import.meta.env.VITE_API_URL as string) +
-          `/?userId=${userinfo.userId}`,
-        { path: "/socket.io", reconnection: true }
-      );
+
+      const socket: SocketIOClient.Socket = io("ws://192.168.0.106:12345", {
+        path: "/socket.io",
+        transports: ["websocket"], // 👈 显式要求使用 websocket
+        query: { userId: userinfo.userId }
+      });
 
       // 建立连接
       socket.on("connect", async () => {

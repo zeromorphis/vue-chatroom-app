@@ -3,7 +3,7 @@
  * @version: 24
  * @Descripttion: Nobody's perfect
  * @Date: 2024-03-25 15:42:29
- * @LastEditTime: 2025-05-02 19:17:02
+ * @LastEditTime: 2025-05-10 18:24:50
  */
 import { defineConfig, loadEnv, ConfigEnv, UserConfig } from "vite";
 import { resolve } from "path";
@@ -38,12 +38,17 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       __APP_INFO__: JSON.stringify(__APP_INFO__)
     },
     css: {
+      modules: {
+        localsConvention: "camelCase", // 默认只支持驼峰，修改为同时支持横线和驼峰
+      },
       preprocessorOptions: {
         scss: {
-          // additionalData: `@import "@/styles/var.scss";`
-          additionalData: `@use "@/styles/var.scss" as *;`
-        }
-      }
+          charset: false,
+        },
+        less: {
+          charset: false,
+        },
+      },
     },
     server: {
       host: "0.0.0.0",
