@@ -2,8 +2,8 @@
  * @Description:
  * @Author: ZY
  * @Date: 2020-12-28 17:18:24
- * @LastEditors: 言棠
- * @LastEditTime: 2022-12-08 16:04:58
+ * @LastEditors: YT
+ * @LastEditTime: 2025-05-10 20:49:44
  */
 
 export default {
@@ -15,6 +15,7 @@ export default {
   login: {
     loginButton: '登录',
     registerButton: '注册',
+    resetButton: '重置',
     userName: '账号',
     password: '密码',
     accountPlaceholder: '请输入账号',

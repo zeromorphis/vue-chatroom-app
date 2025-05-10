@@ -3,31 +3,40 @@
  * @version: 3.0.0
  * @Descripttion: 人人都说顶峰相见，路边的水沟人满为患
  * @Date: 2022-04-14 13:54:14
- * @LastEditTime: 2023-10-22 18:14:45
+ * @LastEditTime: 2025-05-10 22:50:57
 -->
 <template>
-  <div class="chat_container" :style="{'--bg-image': `url('${background}')`}">
+  <div class="chat_container" :style="{ '--bg-image': `url('${background}')` }">
     <img class="background" v-if="background" :src="background" />
     <div class="chat_box">
       <div class="chat-part1" v-if="visibleTool">
         <GenalTool @logout="logOutFun" />
       </div>
       <div class="chat-part2">
-        <GenalSearch @addGroup="addGroupFun" @joinGroup="joinGroupFun" @addFriend="addFriendFun" @setActiveRoom="setActiveRoomFun" />
+        <GenalSearch @addGroup="addGroupFun" @joinGroup="joinGroupFun" @addFriend="addFriendFun"
+          @setActiveRoom="setActiveRoomFun" />
         <GenalRoom @setActiveRoom="setActiveRoomFun" />
       </div>
       <div class="chat-part3">
         <div class="chat-tools-wrap">
           <div class="chat-tool">
-            <menu-fold-outlined @click="toggleTool" v-if="visibleTool" />
-            <menu-unfold-outlined @click="toggleTool" v-else />
+            <el-icon @click="toggleTool" v-if="visibleTool">
+              <Fold />
+            </el-icon>
+            <el-icon @click="toggleTool" v-else>
+              <Expand />
+            </el-icon>
           </div>
-          <message-outlined class="chat-team" @click="visibleDrawer = true" />
+          <el-icon class="chat-team" @click="visibleDrawer = true">
+            <ChatDotRound />
+          </el-icon>
         </div>
         <GenalMessage v-if="activeRoom" />
-        <div class="chat-tools-wrap-right" :class="{'flexEnd': (activeRoom && !groupGather[activeRoom.groupId]) }">
+        <div class="chat-tools-wrap-right" :class="{ 'flexEnd': (activeRoom && !groupGather[activeRoom.groupId]) }">
           <div class="tool-left">
-            <sync-outlined spin class="message-dropped-icon" v-if="dropped" />
+            <el-icon class="message-dropped-icon" v-if="dropped">
+              <Refresh />
+            </el-icon>
             <div v-else class="group-friend">
               <GenalActive v-if="activeRoom && groupGather[activeRoom.groupId]" type="group" />
               <GenalActive v-else type="friend" />
@@ -36,12 +45,14 @@
           <GenalGroupEdit v-if="activeRoom && groupGather[activeRoom.groupId]" />
         </div>
       </div>
-      <a-drawer placement="left" class="chat-drawer" :closable="false" :open="visibleDrawer" @close="visibleDrawer = false" maskClosable width='65%' style="height:100%">
+      <el-drawer v-model="visibleDrawer" direction="ltr" class="chat-drawer" :open="visibleDrawer"
+        @close="visibleDrawer = false" size='65%' :with-header="false">
         <div class="chat-drawer-box">
-          <GenalSearch @addGroup="addGroupFun" @joinGroup="joinGroupFun" @addFriend="addFriendFun" @setActiveRoom="setActiveRoomFun" />
+          <GenalSearch @addGroup="addGroupFun" @joinGroup="joinGroupFun" @addFriend="addFriendFun"
+            @setActiveRoom="setActiveRoomFun" />
           <GenalRoom @setActiveRoom="setActiveRoomFun" />
         </div>
-      </a-drawer>
+      </el-drawer>
     </div>
   </div>
 </template>
@@ -53,7 +64,6 @@ import { useUserStoreWithOut } from '@/store/modules/user';
 import { useChatStoreWithOut } from '@/store/modules/chat';
 import { useGlobalStoreWithOut } from '@/store/modules/global';
 import { LOGIN_URL } from "@/config/config";
-import { MessageOutlined, MenuFoldOutlined, MenuUnfoldOutlined, SyncOutlined } from '@ant-design/icons-vue';
 import GenalTool from '@/components/Chat/GenalTool.vue';
 import GenalSearch from '@/components/Chat/GenalSearch.vue';
 import GenalRoom from '@/components/Chat/GenalRoom.vue';
@@ -63,10 +73,6 @@ import GenalGroupEdit from '@/components/Chat/GenalGroupEdit.vue';
 export default defineComponent({
   name: "Chat",
   components: {
-    MessageOutlined,
-    MenuFoldOutlined,
-    MenuUnfoldOutlined,
-    SyncOutlined,
     GenalTool,
     GenalSearch,
     GenalRoom,
@@ -135,6 +141,7 @@ export default defineComponent({
     // 设置当前聊天窗
     function setActiveRoomFun(room: Friend & Group) {
       useChatStore.SET_ACTIVE_ROOM(room);
+      visibleDrawer.value = false
     }
 
     function toggleTool() {
@@ -183,12 +190,14 @@ export default defineComponent({
   text-align: center;
   overflow: hidden;
   color: rgba(255, 255, 255, 0.85);
+
   .background {
     position: absolute;
     object-fit: cover;
     width: 100%;
     height: 100%;
   }
+
   .chat_box {
     font-size: 16px;
     z-index: 999;
@@ -204,16 +213,19 @@ export default defineComponent({
     display: flex;
     border-radius: 5px;
     overflow: hidden;
+
     .chat-part1 {
       width: 74px;
       height: 100%;
       background-color: rgb(0, 0, 0, 0.7);
     }
+
     .chat-part2 {
       width: 230px;
       height: 100%;
       background-color: rgb(0, 0, 0, 0.3);
     }
+
     .chat-part3 {
       flex: 1;
       height: 100%;
@@ -221,6 +233,7 @@ export default defineComponent({
       overflow-y: hidden;
       position: relative;
       display: flex;
+
       .chat-tools-wrap {
         width: 90px;
         height: 60px;
@@ -230,13 +243,16 @@ export default defineComponent({
         display: flex;
         align-items: center;
         justify-content: space-between;
+
         .chat-tool {
           display: none;
         }
+
         .chat-team {
           display: none;
         }
       }
+
       .chat-tools-wrap-right {
         width: 90px;
         height: 60px;
@@ -246,17 +262,21 @@ export default defineComponent({
         display: flex;
         align-items: center;
         justify-content: space-between;
+
         .tool-left {
           display: flex;
           align-items: center;
+
           .message-dropped-icon {
             font-size: 25px;
           }
         }
       }
+
       .flexEnd {
         justify-content: flex-end;
       }
+
       .chat-group {
         height: 53px;
         border-bottom: 1px solid #ccc;
@@ -265,6 +285,7 @@ export default defineComponent({
       }
     }
   }
+
   .chat_box::after {
     content: '';
     background: var(--bg-image) 0 / cover fixed;
@@ -276,27 +297,35 @@ export default defineComponent({
     transform: scale(1.08);
     z-index: -1;
   }
+
   @media screen and (max-width: 768px) {
     .chat_box {
       margin: 0;
       height: 100%;
+
       .chat-part2 {
         display: none;
       }
+
       .chat-part3 {
         .chat-tools-wrap {
           .chat-tool {
             display: block;
             font-size: 25px;
             line-height: 25px;
+            display: flex;
+            align-items: center;
+
             &:active {
               color: skyblue;
             }
           }
+
           .chat-team {
             display: block;
             font-size: 25px;
             line-height: 25px;
+
             &:active {
               color: skyblue;
             }
@@ -306,35 +335,33 @@ export default defineComponent({
     }
   }
 }
+
 // 抽屉组件重写样式
 .chat-drawer {
-  .ant-drawer-content-wrapper {
+  .el-drawer__body {
     background-color: rgba(54, 50, 50, 0.6) !important;
 
-    .ant-drawer-content {
-      background-color: rgba(0, 0, 0, 0.6) !important;
+    .chat-drawer-box {
+      height: 100%;
+      overflow: hidden;
 
-      .ant-drawer-body {
-        padding: 0 !important;
-        .chat-drawer-box {
-          height: 100%;
-          overflow: hidden;
-          // 移动端群组部分
-          .room-card {
-            background-color: rgba(115, 165, 200, 0.2);
-            .room-card-name {
-              color: rgba(255, 255, 255, 0.85);
-            }
-            .room-card-new {
-              .text {
-                color: rgb(238, 214, 214);
-              }
-            }
-          }
-          .room-card.active {
-            background-color: rgba(115, 165, 200, 0.35);
+      // 移动端群组部分
+      .room-card {
+        background-color: rgba(115, 165, 200, 0.2);
+
+        .room-card-name {
+          color: rgba(255, 255, 255, 0.85);
+        }
+
+        .room-card-new {
+          .text {
+            color: rgb(238, 214, 214);
           }
         }
+      }
+
+      .room-card.active {
+        background-color: rgba(115, 165, 200, 0.35);
       }
     }
   }

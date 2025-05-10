@@ -15,6 +15,7 @@ export default {
   login: {
     loginButton: 'Sign in',
     registerButton: 'Sign up',
+    resetButton: 'Reset',
     userName: 'Username',
     password: 'Password',
     accountPlaceholder: 'Please input username',

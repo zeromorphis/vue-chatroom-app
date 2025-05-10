@@ -3,19 +3,19 @@
  * @version: 4.0.0
  * @Author: 言棠
  * @Date: 2022-08-19 18:35:07
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2025-05-03 17:08:13
+ * @LastEditors: YT
+ * @LastEditTime: 2025-05-10 21:51:03
 -->
 <template>
-  <a-config-provider :locale="locale">
+  <el-config-provider :locale="locale">
     <router-view @mouseover="updateLastTime()" @click="updateLastTime()" v-slot="{ Component }">
-      <a-watermark id="watermark" :font="font" :content="themeConfig.watermark ? ['言棠', '版权所有'] : ''">
+      <el-watermark id="watermark" :font="font" :content="themeConfig.watermark ? ['言棠', '版权所有'] : ''">
         <keep-alive :include="cacheRouter">
           <component :is="Component" />
         </keep-alive>
-      </a-watermark>
+      </el-watermark>
     </router-view>
-  </a-config-provider>
+  </el-config-provider>
 </template>
 
 <script lang="ts">
@@ -28,14 +28,14 @@ import { useChatStoreWithOut } from '@/store/modules/chat';
 import { useGlobalStoreWithOut } from '@/store/modules/global';
 import { isMobile } from "@/utils/common";
 import { DEFAULT_BACKGROUND, LOGIN_URL } from "@/config/config";
-import { useAntdI18n } from "@/hooks/useI18n";
+import { useElementI18n } from "@/hooks/useI18n";
 export default defineComponent({
   name: "App",
   setup() {
     console.log("%cGLOB_API_URL%c" + import.meta.env.VITE_API_URL, 'background: #00cc00; color: #fff; border-radius: 3px 0 0 3px;padding:2px 5px', 'background: #3E4F; color: #3E4F; border-radius: 0 3px 3px 0;padding:2px 5px',)
     provide("echarts", echarts);
     const router = useRouter();
-    const { locale } = useAntdI18n();
+    const { locale } = useElementI18n();
     const userStore = useUserStoreWithOut();
     const chatStore = useChatStoreWithOut();
     const globalStore = useGlobalStoreWithOut();

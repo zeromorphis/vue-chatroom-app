@@ -1,13 +1,19 @@
+<!--
+ * @Author: YT
+ * @Date: 2025-05-10 17:15:18
+ * @LastEditors: YT
+ * @LastEditTime: 2025-05-10 21:19:24
+ * @Description: 当时只道是寻常
+ * @FilePath: /dev/vue-chatroom-app/src/components/Fullscreen/index.vue
+-->
 <template>
   <div class="fullscreen">
-    <SvgIcon v-if="isFullscreen" name="fullscreen-shrink" :iconStyle="{width: '22px', height: '22px'}" @click="toggle" />
-    <SvgIcon v-else name="fullscreen-expand" :iconStyle="{width: '22px', height: '22px'}" @click="toggle" />
+    <el-icon v-if="isFullscreen" @click="toggle" :size="20"><Close /></el-icon>
+    <el-icon v-if="!isFullscreen" @click="toggle" :size="20"><FullScreen /></el-icon>
   </div>
 </template>
 
 <script setup lang="ts" name="Fullscreen">
-import SvgIcon from "@/components/SvgIcon/index.vue";
-import Icon from '@ant-design/icons-vue';
 import { useFullscreen } from "@vueuse/core";
 const { toggle, isFullscreen } = useFullscreen();
 </script>
@@ -16,6 +22,7 @@ const { toggle, isFullscreen } = useFullscreen();
 .fullscreen {
   display: flex;
   align-items: center;
-  margin: 0 8px;
+  margin: 0 12px;
+  cursor: pointer;
 }
 </style>

@@ -12,7 +12,7 @@
     <div class="not-detail">
       <h2>500</h2>
       <h4>Sorry, something went wrong~🤦‍♂️🤦‍♀️</h4>
-      <a-button type="primary" @click="goHome">Back Home</a-button>
+      <el-button type="primary" @click="goHome">Back Home</el-button>
     </div>
   </div>
 </template>

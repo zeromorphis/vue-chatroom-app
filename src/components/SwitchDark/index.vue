@@ -3,20 +3,19 @@
  * @version: 5.0.0
  * @Author: 言棠
  * @Date: 2022-12-05 11:17:27
- * @LastEditors: 言棠
- * @LastEditTime: 2022-12-05 11:21:54
+ * @LastEditors: YT
+ * @LastEditTime: 2025-05-10 21:29:24
 -->
 <template>
-  <a-switch v-model:checked="themeConfig.isDark" @change="onAddDarkChange">
-    <template #checkedChildren>🌞</template>
-    <template #unCheckedChildren>🌜</template>
-  </a-switch>
+  <el-switch v-model="themeConfig.isDark" inline-prompt :active-icon="Sunny" :inactive-icon="Moon" @change="onAddDarkChange" />
 </template>
 
 <script setup lang="ts" name="SwitchDark">
 import { computed } from "vue";
 import { useGlobalStoreWithOut } from '@/store/modules/global';
 import { useTheme } from "@/hooks/useTheme";
+import { Sunny, Moon } from "@element-plus/icons-vue";
+
 const useGlobalStore = useGlobalStoreWithOut();
 
 const { switchDark } = useTheme();

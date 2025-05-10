@@ -3,8 +3,8 @@
  * @version: 4.0.0
  * @Author: 言棠
  * @Date: 2022-06-27 09:21:55
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2025-05-03 16:37:33
+ * @LastEditors: YT
+ * @LastEditTime: 2025-05-10 20:15:26
  */
 import "@/styles/index.scss"; // 所有样式统一注入
 import "virtual:svg-icons-register"; // svg icons
@@ -17,11 +17,14 @@ import { router, setupRouter } from "@/router";
 import { registerDirectives } from "@/directives";
 import { registerGlobAntdComp } from "@/plugins/antd";
 import { registerVueViewer } from "@/plugins/viewer";
+import { registerGlobElementPlusComp } from "@/plugins/elementPlus";
+
 async function bootstrap() {
   const app = createApp(App);
 
-  // 注册全局ant-design-vue组件
+  // 注册全局ui组件
   registerGlobAntdComp(app);
+  registerGlobElementPlusComp(app);
 
   // 注册全局VueViewer组件
   registerVueViewer(app);

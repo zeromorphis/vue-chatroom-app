@@ -3,8 +3,8 @@
  * @version: 5.0.0
  * @Author: 言棠
  * @Date: 2022-12-05 10:14:40
- * @LastEditors: 言棠
- * @LastEditTime: 2022-12-08 16:34:55
+ * @LastEditors: YT
+ * @LastEditTime: 2025-05-10 20:18:32
 -->
 <template>
   <div class="login-container flx-center">
@@ -24,14 +24,14 @@
         </div>
       </div>
       <div class="login-form">
-        <a-tabs v-model:activeKey="activeKey">
-          <a-tab-pane key="1" :tab="t('login.loginButton')">
+        <el-tabs v-model="activeKey">
+          <el-tab-pane :label="t('login.loginButton')" name="1">
             <LoginForm />
-          </a-tab-pane>
-          <a-tab-pane key="2" :tab="t('login.registerButton')">
+          </el-tab-pane>
+          <el-tab-pane :label="t('login.registerButton')" name="2">
             <RegisterForm />
-          </a-tab-pane>
-        </a-tabs>
+          </el-tab-pane>
+        </el-tabs>
       </div>
     </div>
   </div>
@@ -63,9 +63,11 @@ const activeKey = ref('1');
   background-size: 100% 100%;
   background-size: cover;
   padding: 30px;
+
   @media (max-width: 560px) {
     padding: 0;
   }
+
   .login-box {
     box-sizing: border-box;
     display: flex;
@@ -76,20 +78,25 @@ const activeKey = ref('1');
     padding: 30px;
     position: relative;
     background-color: hsl(0deg 0% 100% / 80%);
+
     @media (max-width: 560px) {
       padding: 0;
       border-radius: 0;
     }
+
     .login-left {
       width: 800px;
+
       @media (max-width: 1100px) {
         display: none;
       }
+
       img {
         width: 100%;
         height: 100%;
       }
     }
+
     .header {
       width: 100%;
       position: absolute;
@@ -97,31 +104,37 @@ const activeKey = ref('1');
       padding: 0 20px;
       display: flex;
       justify-content: space-between;
+
       .title {
         display: flex;
         align-items: center;
+
         img {
           width: 25px;
           height: 25px;
           display: block;
         }
+
         span {
           margin-left: 6px;
           font-family: 'DIN-Alternate-Bold';
           font-weight: bold;
         }
       }
+
       .tools-box {
         display: flex;
         align-items: center;
       }
     }
+
     .login-form {
       width: 420px;
       padding: 20px 40px 40px;
       border-radius: 10px;
       background-color: #fff;
       box-shadow: 2px 3px 7px rgb(0 0 0 / 20%);
+
       @media (max-width: 560px) {
         width: 90%;
         height: 75%;

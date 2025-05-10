@@ -1,8 +1,12 @@
 <template>
   <div class="active_container">
     <div v-if="type === 'group'">
-      <team-outlined @click="() => (showGroupUser = !showGroupUser)" class="active-button" :class="{ heightLight: showGroupUser }" />
-      <a-drawer class="acitve-drawer" placement="right" :closable="false" v-model:open="showGroupUser" :getContainer="getElement()" @close="showGroupUser = false " width='30%' style="position: absolute">
+      <el-icon @click="() => (showGroupUser = !showGroupUser)" class="active-button"
+        :class="{ 'heightLight': showGroupUser }">
+        <UserFilled />
+      </el-icon>
+      <el-drawer class="acitve-drawer" direction="rtl" v-model="showGroupUser" @close="showGroupUser = false" size='45%'
+        :with-header="false">
         <div class="active-content" v-if="activeGroupUser[activeRoom.groupId]">
           <div class="actiev-content-title">群聊管理</div>
           <div class="actiev-content-box-wrap">
@@ -13,16 +17,22 @@
               </div>
             </div>
             <div class="active-content-out-wrap">
-              <a-button type="danger" class="active-content-out" :disabled="activeRoom.groupId === DEFAULT_GROUP_ID" @click="exitGroup">退出</a-button>
+              <el-button type="danger" class="active-content-out" :disabled="activeRoom.groupId === DEFAULT_GROUP_ID"
+                @click="exitGroup">退出</el-button>
             </div>
           </div>
         </div>
-      </a-drawer>
+      </el-drawer>
     </div>
     <div v-else>
-      <a-popconfirm title="确定要删除该好友吗？" placement="bottomRight" ok-text="Yes" cancel-text="No" @confirm="exitFriend">
-        <user-delete-outlined class="active-button" />
-      </a-popconfirm>
+      <el-popconfirm title="确定要删除该好友吗？" @confirm="exitFriend" icon-color="#626AEF" confirm-button-text="Yes"
+        cancel-button-text="No" placement="bottom-end">
+        <template #reference>
+          <el-icon class="active-button">
+            <DeleteFilled />
+          </el-icon>
+        </template>
+      </el-popconfirm>
     </div>
   </div>
 </template>
@@ -92,87 +102,86 @@ export default defineComponent({
 });
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .active_container {
   border-radius: 0 0 5px 5px;
+
   .active-button {
     font-size: 25px;
     cursor: pointer;
+
     &:active {
       color: skyblue;
     }
   }
+
   .active-button.heightLight {
     color: skyblue;
   }
 }
+
 ::-webkit-scrollbar {
   display: none !important;
 }
+
 // 抽屉组件重写样式
 .acitve-drawer {
-  .ant-drawer-wrapper-body {
-    background-color: rgba(54, 50, 50, 0.5) !important;
+  .el-drawer__body {
+    background-color: rgba(0, 0, 0, 0.5) !important;
 
-    .ant-drawer-body {
-      background-color: rgba(0, 0, 0, 0.5) !important;
-        padding: 0 !important;
+    // 在线人数部分
+    .active-content {
+      height: 100%;
+      border-radius: 0 0 5px 5px;
+      text-align: left;
 
-        // 在线人数部分
-        .active-content {
-          height: 100%;
-          border-radius: 0 0 5px 5px;
-          text-align: left;
+      .actiev-content-title {
+        text-align: center;
+        height: 60px;
+        line-height: 60px;
+        padding: 0 12px;
+        font-size: 16px;
+        color: #fff;
+        border-bottom: 0.5px solid rgba(0, 0, 0, 1);
+      }
 
-          .actiev-content-title {
-            text-align: center;
-            height: 60px;
-            line-height: 60px;
-            padding: 0 12px;
-            font-size: 16px;
-            color: #fff;
-            border-bottom: 0.5px solid rgba(0, 0, 0, 1);
+      .actiev-content-box-wrap {
+        height: calc(100% - 60px);
+
+        .active-content-sum {
+          font-weight: bold;
+          height: 40px;
+          line-height: 40px;
+          padding: 0 12px;
+        }
+
+        .active-content-users {
+          height: calc(100% - 40px - 40px);
+          overflow-y: scroll;
+
+          .active-content-user {
+            overflow: hidden; //超出的文本隐藏
+            text-overflow: ellipsis; //溢出用省略号显示
+            white-space: nowrap; //溢出不换行
+            text-align: left;
+            padding: 3px 12px;
+            display: flex;
+            align-items: center;
           }
+        }
 
-          .actiev-content-box-wrap {
-            height: calc(100% - 60px);
+        .active-content-out-wrap {
+          width: 100%;
+          height: 40px;
+          padding: 6px 12px;
 
-            .active-content-sum {
-              font-weight: bold;
-              height: 40px;
-              line-height: 40px;
-              padding: 0 12px;
-            }
-
-            .active-content-users {
-              height: calc(100% - 40px - 40px);
-              overflow-y: scroll;
-
-              .active-content-user {
-                overflow: hidden; //超出的文本隐藏
-                text-overflow: ellipsis; //溢出用省略号显示
-                white-space: nowrap; //溢出不换行
-                text-align: left;
-                padding: 3px 12px;
-                display: flex;
-                align-items: center;
-              }
-            }
-
-            .active-content-out-wrap {
-              width: 100%;
-              height: 40px;
-              padding: 6px 12px;
-              background-color: #DBA40E;
-
-              .active-content-out {
-                width: 100%;
-                height: 28px;
-              }
-            }
+          .active-content-out {
+            width: 100%;
+            height: 28px;
           }
         }
       }
+    }
   }
 }
 </style>

@@ -3,39 +3,54 @@
  * @version: 5.0.0
  * @Author: 言棠
  * @Date: 2022-11-29 14:49:18
- * @LastEditors: 言棠
- * @LastEditTime: 2022-12-28 18:32:13
+ * @LastEditors: YT
+ * @LastEditTime: 2025-05-10 22:58:22
 -->
 <template>
   <div class="genalJoin_register">
-    <a-form :model="formState" name="register" autocomplete="off" @finish="onFinish" @finishFailed="onFinishFailed">
-      <a-form-item name="username" :rules="[{ required: true, message: t('login.accountPlaceholder') }]">
-        <a-input v-model:value="formState.username" :placeholder="t('login.userName')" />
-      </a-form-item>
-      <a-form-item name="password" :rules="[{ required: true, message: t('login.passwordPlaceholder') }]">
-        <a-input-password v-model:value="formState.password" :placeholder="t('login.password')" />
-      </a-form-item>
-      <a-form-item>
-        <a-button type="primary" html-type="submit" class="login-form-button">{{t("login.registerButton")}}</a-button>
-      </a-form-item>
-    </a-form>
+    <el-form ref="registerRef" :model="register" :rules="registerRules" size="large">
+      <el-form-item prop="username">
+        <el-input v-model="register.username" :placeholder="t('login.userName')">
+          <template #prefix>
+            <el-icon class="el-input__icon">
+              <user />
+            </el-icon>
+          </template>
+        </el-input>
+      </el-form-item>
+      <el-form-item prop="password">
+        <el-input v-model="register.password" type="password" :placeholder="t('login.password')" show-password
+          autocomplete="new-password">
+          <template #prefix>
+            <el-icon class="el-input__icon">
+              <lock />
+            </el-icon>
+          </template>
+        </el-input>
+      </el-form-item>
+      <el-form-item class="flx-center">
+        <el-button :icon="CircleClose" round size="large" @click="resetFormFun(registerRef)" class="login-form-button">{{ t("login.resetButton") }}</el-button>
+        <el-button :icon="UserFilled" round size="large" type="primary" :loading="loading"
+          @click="registerFun(registerRef)" class="login-form-button">{{ t("login.registerButton") }}</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script lang="ts">
-import { reactive, toRaw, defineComponent } from "vue";
+import { ref, reactive, defineComponent } from "vue";
 import { useRouter } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { useUserStoreWithOut } from '@/store/modules/user';
 import { useChatStoreWithOut } from '@/store/modules/chat';
 import { getTimeState } from "@/utils/common";
 import { HOME_URL } from "@/config/config";
-import { notification } from 'ant-design-vue';
+import type { Login } from "@/api/interface";
+import { ElNotification } from "element-plus";
+import type { ElForm } from "element-plus";
+import { CircleClose, UserFilled } from "@element-plus/icons-vue";
 import md5 from "js-md5";
-interface FormState {
-  username: string;
-  password: string;
-}
+
 export default defineComponent({
   name: "RegisterForm",
   setup() {
@@ -44,39 +59,63 @@ export default defineComponent({
     const useUserStore = useUserStoreWithOut();
     const useChatStore = useChatStoreWithOut();
 
-    const formState = reactive<FormState>({
+    type FormInstance = InstanceType<typeof ElForm>;
+    const registerRef = ref<FormInstance>();
+    const registerRules = reactive({
+      username: [{ required: true, message: t('login.accountPlaceholder'), trigger: "blur" }],
+      password: [{ required: true, message: t('login.passwordPlaceholder'), trigger: "blur" }]
+    });
+
+    const loading = ref(false);
+    const register = reactive<Login.ReqLoginForm>({
       username: '',
       password: '',
     });
 
-    const onFinish = async (values: any) => {
-      console.log('Success:', values);
-      let res = await useUserStore.register(toRaw({ username: values.username, password: md5(values.password) }));
-      if (res) {
-        // 进入系统事件
-        await handleJoin();
-        router.push({ path: HOME_URL });
-        notification['success']({
-          message: getTimeState(),
-          description: `欢迎登录 ${res.data.username}`,
-          duration: 4.5
-        });
-      }
+    const registerFun = async (formEl: FormInstance | undefined) => {
+      if (!formEl) return;
+      formEl.validate(async valid => {
+        if (!valid) return;
+        loading.value = true;
+        try {
+          let res = await useUserStore.register({ ...register, password: md5(register.password) });
+          if (res) {
+            // 进入系统事件
+            await handleJoin();
+            router.push({ path: HOME_URL });
+            ElNotification({
+              title: getTimeState(),
+              message: "欢迎登录 Chat-Room",
+              type: "success",
+              duration: 3000
+            });
+          }
+        } finally {
+          loading.value = false;
+        }
+      });
     };
 
-    const onFinishFailed = (errorInfo: any) => {
-      console.log('Failed:', errorInfo);
+    // resetForm
+    const resetFormFun = (formEl: FormInstance | undefined) => {
+      if (!formEl) return;
+      formEl.resetFields();
     };
 
     // 进入系统初始化事件
     const handleJoin = async () => {
       await useChatStore.connectSocket();
     }
+
     return {
       t,
-      formState,
-      onFinish,
-      onFinishFailed,
+      loading,
+      register,
+      registerRef,
+      registerRules,
+      CircleClose, UserFilled,
+      registerFun,
+      resetFormFun,
     };
   },
 });
@@ -84,10 +123,15 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .genalJoin_register {
-  .login-form-button {
-    width: 100%;
+  :deep(.el-form-item__content) {
+    display: flex;
+    justify-content: center;
   }
-  :deep(.ant-form-item:last-child) {
+  .login-form-button {
+    width: 45%;
+  }
+
+  :deep(.el-form-item:last-child) {
     margin-bottom: 0;
   }
 }

@@ -3,8 +3,8 @@
  * @version: 5.0.0
  * @Author: 言棠
  * @Date: 2022-12-01 17:54:08
- * @LastEditors: 言棠
- * @LastEditTime: 2022-12-09 16:51:38
+ * @LastEditors: YT
+ * @LastEditTime: 2025-05-10 21:54:00
 -->
 <template>
   <div class="not-container">
@@ -12,7 +12,7 @@
     <div class="not-detail">
       <h2>404</h2>
       <h4>Sorry, the page you visited does not exist~🤷‍♂️🤷‍♀️</h4>
-      <a-button type="primary" @click="goHome">Back Home</a-button>
+      <el-button type="primary" @click="goHome">Back Home</el-button>
     </div>
   </div>
 </template>

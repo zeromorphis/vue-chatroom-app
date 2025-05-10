@@ -8,7 +8,8 @@
  */
 import { defineStore } from "pinia";
 import { store } from "@/store";
-import { UserState } from "../interface";
+import type { UserState } from "../interface";
+import type { Login } from "@/api/interface";
 import piniaPersistConfig from "../utils/piniaPersist";
 import { loginApi, registerApi } from "@/api/modules/auth";
 import { message } from "ant-design-vue";
@@ -45,7 +46,7 @@ export const useUserStore = defineStore("user", {
     SET_USERINFO(payload: User) {
       this.userinfo = payload;
     },
-    async register(params: User): Promise<any> {
+    async register(params: Login.ReqLoginForm): Promise<any> {
       try {
         const res: any = await registerApi(params);
         // save token
@@ -57,7 +58,7 @@ export const useUserStore = defineStore("user", {
         return Promise.reject(error);
       }
     },
-    async login(params: User): Promise<any> {
+    async login(params: Login.ReqLoginForm): Promise<any> {
       try {
         const res: any = await loginApi(params);
         // save token
