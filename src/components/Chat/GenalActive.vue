@@ -39,7 +39,6 @@
 
 <script lang="ts">
 import { ref, computed, defineComponent } from "vue";
-import { TeamOutlined, UserDeleteOutlined } from '@ant-design/icons-vue';
 import { useUserStoreWithOut } from '@/store/modules/user';
 import { useChatStoreWithOut } from '@/store/modules/chat';
 import { DEFAULT_GROUP_ID } from '@/config/config';
@@ -47,8 +46,6 @@ import GenalAvatar from './GenalAvatar.vue';
 export default defineComponent({
   name: "GenalActive",
   components: {
-    TeamOutlined,
-    UserDeleteOutlined,
     GenalAvatar,
   },
   props: {

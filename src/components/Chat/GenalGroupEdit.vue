@@ -3,51 +3,57 @@
  * @version: 5.0.0
  * @Author: 言棠
  * @Date: 2022-12-08 11:50:38
- * @LastEditors: 言棠
- * @LastEditTime: 2023-10-22 18:17:14
+ * @LastEditors: YT
+ * @LastEditTime: 2025-05-11 00:01:14
 -->
 <template>
   <div class="groupedit_container">
-    <a-dropdown :trigger="['click']">
-      <setting-outlined class="group-setting-icon" />
-      <template #overlay>
-        <a-menu>
-          <a-menu-item :disabled="activeRoom.groupId === DEFAULT_GROUP_ID" @click="() => (visibleEditGroupName = !visibleEditGroupName)">
-            编辑群名称
-          </a-menu-item>
-          <a-menu-divider />
-          <a-menu-item @click="() => (visibleEditGroupNotice = !visibleEditGroupNotice)">编辑群公告</a-menu-item>
-        </a-menu>
+    <el-dropdown @command="handleEditGroupNameFun" placement="bottom-start">
+      <el-icon class="group-setting-icon">
+        <Tools />
+      </el-icon>
+      <template #dropdown>
+        <el-dropdown-menu>
+          <el-dropdown-item :disabled="activeRoom.groupId === DEFAULT_GROUP_ID" command="1">编辑群名称</el-dropdown-item>
+          <el-dropdown-item command="2">编辑群公告</el-dropdown-item>
+        </el-dropdown-menu>
       </template>
-    </a-dropdown>
+    </el-dropdown>
     <!-- 编辑群名称 -->
-    <a-modal v-model:open="visibleEditGroupName" centered footer="" title="编辑群名称">
-      <div style="display:flex">
-        <a-input v-model:value="groupName" :maxlength='220' :disabled="activeRoom.groupId === DEFAULT_GROUP_ID" placeholder="请输入群名字"></a-input>
-        <a-button @click="editGroupNameFun" :disabled="activeRoom.groupId === DEFAULT_GROUP_ID" type="primary">确定</a-button>
-      </div>
-    </a-modal>
+    <el-dialog v-model="visibleEditGroupName" title="编辑群名称" width="500" align-center>
+      <el-input v-model="groupName" :maxlength='220' :disabled="activeRoom.groupId === DEFAULT_GROUP_ID"
+        placeholder="请输入群名字"></el-input>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="visibleEditGroupName = false">取消</el-button>
+          <el-button type="primary" @click="editGroupNameFun">
+            确认
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
     <!-- 编辑群公告 -->
-    <a-modal v-model:open="visibleEditGroupNotice" centered footer="" title="编辑群公告">
-      <div style="display:flex">
-        <a-input v-model:value="groupNotice" :maxlength='220' placeholder="请输入群名字"></a-input>
-        <a-button @click="editGroupNoticeFun" type="primary">确定</a-button>
-      </div>
-    </a-modal>
+    <el-dialog v-model="visibleEditGroupNotice" title="编辑群公告" width="500" align-center>
+      <el-input v-model="groupNotice" :maxlength='220' placeholder="请输入群名字"></el-input>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="visibleEditGroupNotice = false">取消</el-button>
+          <el-button type="primary" @click="editGroupNoticeFun">
+            确认
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import { ref, computed, watch, defineComponent } from "vue";
-import { SettingOutlined } from '@ant-design/icons-vue';
 import { useUserStoreWithOut } from '@/store/modules/user';
 import { useChatStoreWithOut } from '@/store/modules/chat';
 import { DEFAULT_GROUP_ID } from '@/config/config';
 export default defineComponent({
   name: "GenalGroupEdit",
-  components: {
-    SettingOutlined,
-  },
   setup() {
     const useUserStore = useUserStoreWithOut();
     const useChatStore = useChatStoreWithOut();
@@ -64,6 +70,17 @@ export default defineComponent({
       groupNotice.value = newVal.notice;
     }, { immediate: true, deep: true }); // 开启深度监听
 
+    const handleEditGroupNameFun = (type: string) => {
+      switch (type) {
+        case '1':
+          visibleEditGroupName.value = true;
+          break;
+        case '2':
+          visibleEditGroupNotice.value = true;
+          break;
+      }
+    };
+
     // 群名称修改（默认群禁止任何人修改群昵称）
     function editGroupNameFun() {
       socket.value.emit('editGroupName', {
@@ -71,6 +88,7 @@ export default defineComponent({
         groupId: activeRoom.value.groupId,
         groupName: groupName.value,
       });
+      visibleEditGroupName.value = false;
     }
 
     // 群公告修改
@@ -80,6 +98,7 @@ export default defineComponent({
         groupId: activeRoom.value.groupId,
         notice: groupNotice.value,
       });
+      visibleEditGroupNotice.value = false;
     }
 
     return {
@@ -87,6 +106,7 @@ export default defineComponent({
       groupNotice,
       visibleEditGroupName,
       visibleEditGroupNotice,
+      handleEditGroupNameFun,
       editGroupNameFun,
       editGroupNoticeFun,
       activeRoom,
