@@ -6,64 +6,77 @@
       </div>
       <div class="tool-avatar-name">{{ userinfo.username }}</div>
     </div>
-    <a-tooltip placement="topLeft" arrow-point-at-center>
-      <template #title>
+    <el-tooltip placement="top">
+      <template #content>
         <div slot="title">
           <div>请文明聊天</div>
           <div>截图粘贴可发送图片</div>
         </div>
       </template>
-      <bulb-outlined class="tool-tip icon" />
-    </a-tooltip>
-    <skin-outlined class="tool-skin icon" @click="showBackgroundModal = true" />
-    <poweroff-outlined class="tool-out icon" @click="logOut" />
-    <a-modal title="用户信息" v-model:open="showUserModal" centered footer="" @cancel="showUserModal = false">
+      <el-icon class="tool-tip icon">
+        <Opportunity />
+      </el-icon>
+    </el-tooltip>
+    <el-icon class="tool-skin icon" @click="showBackgroundModal = true">
+      <MagicStick />
+    </el-icon>
+    <el-icon class="tool-out icon" @click="logOut">
+      <TurnOff />
+    </el-icon>
+    <el-dialog v-model="showUserModal" title="用户信息" width="500" align-center>
       <div class="tool-user">
-        <div @mouseover="showUpload = true" @mouseleave="showUpload = false" class="tool-user-avatar" :class="{ active: showUpload || uploading }">
-          <a-avatar :src="userinfo.avatar" class="img" :size="120"></a-avatar>
-          <a-upload v-if="showUpload && !uploading" class="tool-user-upload" :show-upload-list="false" :before-upload="beforeUpload">
+        <div @mouseover="showUpload = true" @mouseleave="showUpload = false" class="tool-user-avatar"
+          :class="{ active: showUpload || uploading }">
+          <el-avatar :src="userinfo.avatar" class="img" :size="120"></el-avatar>
+          <el-upload v-if="showUpload && !uploading" class="tool-user-upload" :show-file-list="false"
+            :before-upload="beforeUpload">
             <div class="text">
-              <upload-outlined style="margin-right: 4px;" />
+              <el-icon style="margin-right: 4px;">
+                <UploadFilled />
+              </el-icon>
               <span>更换头像</span>
             </div>
-          </a-upload>
+          </el-upload>
           <loading-outlined class="loading" v-if="uploading" spin />
         </div>
         <div class="tool-user-info">
           <div class="tool-user-title">更改用户名</div>
-          <a-input class="tool-user-input" v-model:value="username" placeholder="请输入用户名"></a-input>
-          <a-button type="primary" @click="changeUserNameFun">确认</a-button>
+          <el-input class="tool-user-input" v-model="username" placeholder="请输入用户名"></el-input>
+          <el-button type="primary" @click="changeUserNameFun">确认</el-button>
         </div>
         <div class="tool-user-info">
           <div class="tool-user-title">更改密码</div>
-          <a-input-password class="tool-user-input" v-model:value="password" placeholder="请输入密码"></a-input-password>
-          <a-button type="primary" @click="changePasswordFun">确认</a-button>
+          <el-input type="password" class="tool-user-input" v-model="password" placeholder="请输入密码"></el-input>
+          <el-button type="primary" @click="changePasswordFun">确认</el-button>
         </div>
       </div>
-    </a-modal>
-    <a-modal title="主题" v-model:open="showBackgroundModal" centered footer="" @cancel="showBackgroundModal = false">
+    </el-dialog>
+    <el-dialog v-model="showBackgroundModal" title="主题" width="500" align-center>
       <div class="tool-user-info">
         <div class="tool-user-title" style="width: 65px;">
           <span>背景图</span>
-          <a-tooltip placement="topLeft" arrow-point-at-center>
-            <template #title>
+          <el-tooltip placement="top">
+            <template #content>
               <div slot="title">
                 <span>输入空格时为默认背景, 支持 jpg, png, gif等格式</span>
               </div>
             </template>
-            <info-circle-outlined style="margin-left: 5px;" />
-          </a-tooltip>
+            <el-icon style="margin-left: 5px;">
+              <InfoFilled />
+            </el-icon>
+          </el-tooltip>
         </div>
-        <a-input v-model:value="background" class="tool-user-input" placeholder="请输入背景图片网址"></a-input>
-        <a-button type="primary" @click="changeBackgroundFun()">确认</a-button>
+        <el-input v-model="background" class="tool-user-input" placeholder="请输入背景图片网址"></el-input>
+        <el-button type="primary" @click="changeBackgroundFun()">确认</el-button>
       </div>
       <div class="tool-recommend">
-        <div v-for="(item,index) in wallpaperList" :key="index" @click="setBackgroundFun(item.imgurl)" class="recommend">
+        <div v-for="(item, index) in wallpaperList" :key="index" @click="setBackgroundFun(item.imgurl)"
+          class="recommend">
           <img :src="item.imgurl" :alt="item.title" />
-          <span class="text">{{item.title}}</span>
+          <span class="text">{{ item.title }}</span>
         </div>
       </div>
-    </a-modal>
+    </el-dialog>
   </div>
 </template>
 
@@ -76,7 +89,7 @@ import { useGlobalStoreWithOut } from '@/store/modules/global';
 import { nameVerify, passwordVerify } from '@/utils/common';
 import { setUserAvatarApi, patchUserNameApi, patchPasswordApi } from '@/api/modules/user';
 import { DEFAULT_BACKGROUND, DEFAULT_GROUP_ID } from '@/config/config';
-import { message } from 'ant-design-vue';
+import { ElNotification } from "element-plus";
 import md5 from "js-md5";
 interface FormState {
   username: string;
@@ -165,11 +178,23 @@ export default defineComponent({
     function beforeUpload(file: any) {
       const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg' || file.type === 'image/gif';
       if (!isJpgOrPng) {
-        return message.error('请上传jpeg/jpg/png/gif格式的图片!');
+        ElNotification({
+          title: 'Error',
+          message: "请上传jpeg/jpg/png/gif格式的图片!",
+          type: "error",
+          duration: 1500
+        });
+        return;
       }
       const isLt1M = file.size / 1024 / 1024 < 0.5;
       if (!isLt1M) {
-        return message.error('图片必须小于500K!');
+        ElNotification({
+          title: 'Error',
+          message: "图片必须小于500K!",
+          type: "error",
+          duration: 1500
+        });
+        return;
       }
       formState.avatar = file;
       handleUpload();
@@ -193,9 +218,19 @@ export default defineComponent({
           userId: res.data.userId,
         });
         showUserModal.value = false;
-        message.success(res.msg);
+        ElNotification({
+          title: 'Success',
+          message: res.msg,
+          type: "success",
+          duration: 1500
+        });
       }).catch((err: any) => {
-        message.error(err.msg);
+        ElNotification({
+          title: 'Error',
+          message: err.msg,
+          type: "error",
+          duration: 1500
+        });
       });
     }
 
@@ -214,9 +249,19 @@ export default defineComponent({
           userId: res.data.userId,
         });
         showUserModal.value = false;
-        message.success(res.msg);
+        ElNotification({
+          title: 'Success',
+          message: res.msg,
+          type: "success",
+          duration: 1500
+        });
       }).catch((err: any) => {
-        message.error(err.msg);
+        ElNotification({
+          title: 'Error',
+          message: err.msg,
+          type: "error",
+          duration: 1500
+        });
       });
     }
 
@@ -231,9 +276,19 @@ export default defineComponent({
         useChatStore.SET_USER_GATHER(res.data);
         showUserModal.value = false;
         formState.password = '';
-        message.success(res.msg);
-      } catch (error) {
-        message.error(error.msg);
+        ElNotification({
+          title: 'Success',
+          message: res.msg,
+          type: "success",
+          duration: 1500
+        });
+      } catch (err: any) {
+        ElNotification({
+          title: 'Error',
+          message: err.msg,
+          type: "error",
+          duration: 1500
+        });
       }
     }
 
@@ -281,8 +336,10 @@ export default defineComponent({
   padding: 10px 5px;
   height: 98%;
   position: relative;
+
   .tool-avatar {
     margin-top: 3px;
+
     .tool-avatar-img {
       margin: 0 auto;
       width: 55px;
@@ -290,12 +347,14 @@ export default defineComponent({
       border-radius: 50%;
       overflow: hidden;
       cursor: pointer;
+
       img {
         width: 100%;
         height: 100%;
         object-fit: cover;
       }
     }
+
     .tool-avatar-name {
       color: #fff;
       overflow: hidden; //超出的文本隐藏
@@ -304,15 +363,19 @@ export default defineComponent({
       margin-top: 2px;
     }
   }
+
   .tool-tip {
     bottom: 130px;
   }
+
   .tool-skin {
     bottom: 70px;
   }
+
   .tool-out {
     bottom: 10px;
   }
+
   .icon {
     display: flex;
     flex-direction: column;
@@ -321,6 +384,7 @@ export default defineComponent({
     font-size: 25px;
     cursor: pointer;
     z-index: 100;
+
     &:hover {
       color: skyblue;
     }
@@ -330,14 +394,20 @@ export default defineComponent({
 .tool-user {
   text-align: center;
   font-size: 16px;
+
   .tool-user-avatar {
     position: relative;
     width: 120px;
+    height: 120px;
     overflow: hidden;
     margin: 0 auto 24px;
     border-radius: 50%;
     cursor: pointer;
+
     .tool-user-upload {
+      width: 100%;
+      height: 100%;
+
       .text {
         position: absolute;
         left: 0;
@@ -345,11 +415,18 @@ export default defineComponent({
         width: 100%;
         height: 100%;
         border-radius: 50%;
+        height: 120px;
         line-height: 120px;
         font-weight: bold;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
+
     .loading {
+      width: 100%;
+      height: 100%;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -358,9 +435,13 @@ export default defineComponent({
       font-weight: bold;
       color: #fff;
     }
+
     .img {
+      width: 100%;
+      height: 100%;
       transition: 0.2s all linear;
     }
+
     &.active {
       .img {
         filter: blur(3px);
@@ -368,14 +449,17 @@ export default defineComponent({
     }
   }
 }
+
 .tool-user-info {
   display: flex;
   justify-content: left;
   align-items: center;
+
   .tool-user-input {
     flex: 1;
     margin-right: 5px;
   }
+
   .tool-user-title {
     display: flex;
     align-items: center;
@@ -385,6 +469,7 @@ export default defineComponent({
     word-break: keep-all;
     margin-right: 15px;
   }
+
   &:nth-child(2) {
     margin-bottom: 15px;
   }
@@ -396,6 +481,7 @@ export default defineComponent({
   margin-top: 10px;
   max-height: 300px;
   overflow-y: scroll;
+
   .recommend {
     display: flex;
     align-items: center;
@@ -407,11 +493,13 @@ export default defineComponent({
     transition: 0.3s all linear;
     position: relative;
     cursor: pointer;
+
     img {
       width: 95%;
       height: 95%;
       object-fit: cover;
     }
+
     .text {
       position: absolute;
       color: rgba(255, 255, 255, 0.85);
@@ -419,8 +507,10 @@ export default defineComponent({
       transition: 0.3s all linear;
       opacity: 0;
     }
+
     &:hover {
       box-shadow: 1px 5px 10px gray;
+
       .text {
         opacity: 1;
       }
@@ -431,9 +521,11 @@ export default defineComponent({
 @media screen and (max-width: 788px) {
   .tool-recommend {
     font-size: 12px;
+
     .recommend {
       width: 50%;
       height: 150px;
+
       img {
         width: 95%;
         height: 95%;
@@ -446,9 +538,11 @@ export default defineComponent({
 @media screen and (max-width: 420px) {
   .tool-recommend {
     max-height: 360px;
+
     .recommend {
       width: 100%;
       height: 120px;
+
       img {
         width: 95%;
         height: 95%;

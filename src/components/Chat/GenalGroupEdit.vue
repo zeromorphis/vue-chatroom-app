@@ -4,13 +4,13 @@
  * @Author: 言棠
  * @Date: 2022-12-08 11:50:38
  * @LastEditors: YT
- * @LastEditTime: 2025-05-11 00:01:14
+ * @LastEditTime: 2025-05-11 10:32:40
 -->
 <template>
   <div class="groupedit_container">
-    <el-dropdown @command="handleEditGroupNameFun" placement="bottom-start">
+    <el-dropdown trigger="click" @command="handleEditGroupNameFun">
       <el-icon class="group-setting-icon">
-        <Tools />
+        <Setting />
       </el-icon>
       <template #dropdown>
         <el-dropdown-menu>

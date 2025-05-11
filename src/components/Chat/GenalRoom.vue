@@ -2,7 +2,7 @@
   <div class="room_container" v-if='chatArr.length'>
     <div v-for="(chat, index) in chatArr" :key="(chat.userId || chat.groupId) + index">
       <div v-if="chat.groupId" class="room-card" :class="{ active: activeRoom && activeRoom.groupId === chat.groupId }" @click="changeActiveRoom(chat)">
-        <a-badge class="room-card-badge" :count="unReadGather[chat.groupId]" />
+        <el-badge :show-zero="false" class="room-card-badge" max="99" :value="unReadGather[chat.groupId]" />
         <img class="room-card-type" src="@/assets/images/chat/group.gif" alt="" />
         <div class="room-card-message">
           <div class="room-card-name">{{ chat.groupName }}</div>
@@ -13,7 +13,7 @@
         </div>
       </div>
       <div v-else class="room-card" :class="{ active: activeRoom && !activeRoom.groupId && activeRoom.userId === chat.userId }" @click="changeActiveRoom(chat)">
-        <a-badge class="room-card-badge" :count="unReadGather[chat.userId]" />
+        <el-badge :show-zero="false" class="room-card-badge" max="99" :value="unReadGather[chat.userId]" />
         <img class="room-card-type" :src="friendGather[chat.userId].avatar" :class="{ offLine: !isOnLine(chat.userId) }" alt="" />
         <div class="room-card-message">
           <div class="room-card-name">{{ chat.username }}</div>
@@ -29,15 +29,11 @@
 
 <script lang="ts">
 import { ref, onBeforeMount, computed, watch, defineComponent, SetupContext } from "vue";
-import { PlusCircleOutlined } from '@ant-design/icons-vue';
 import { useChatStoreWithOut } from '@/store/modules/chat';
 import { parseText } from '@/utils/common';
 import { DEFAULT_GROUP_ID } from '@/config/config';
 export default defineComponent({
   name: "GenalRoom",
-  components: {
-    PlusCircleOutlined,
-  },
   emits: ['setActiveRoom'],
   setup(props, content: SetupContext) {
     const useChatStore = useChatStoreWithOut();

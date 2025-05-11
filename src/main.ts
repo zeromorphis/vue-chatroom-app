@@ -4,7 +4,7 @@
  * @Author: 言棠
  * @Date: 2022-06-27 09:21:55
  * @LastEditors: YT
- * @LastEditTime: 2025-05-10 20:15:26
+ * @LastEditTime: 2025-05-11 16:14:41
  */
 import "@/styles/index.scss"; // 所有样式统一注入
 import "virtual:svg-icons-register"; // svg icons
@@ -15,7 +15,6 @@ import { setupStore } from "@/store";
 import { setupI18n } from "@/locales";
 import { router, setupRouter } from "@/router";
 import { registerDirectives } from "@/directives";
-import { registerGlobAntdComp } from "@/plugins/antd";
 import { registerVueViewer } from "@/plugins/viewer";
 import { registerGlobElementPlusComp } from "@/plugins/elementPlus";
 
@@ -23,7 +22,6 @@ async function bootstrap() {
   const app = createApp(App);
 
   // 注册全局ui组件
-  registerGlobAntdComp(app);
   registerGlobElementPlusComp(app);
 
   // 注册全局VueViewer组件

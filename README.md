@@ -3,14 +3,14 @@
  * @version: 3.0.0
  * @Descripttion: 授人以渔，功德无量，利在千秋
  * @Date: 2022-04-14 20:10:18
- * @LastEditors: Please set LastEditors
- * @LastEditTime: 2025-05-03 20:47:43
+ * @LastEditors: YT
+ * @LastEditTime: 2025-05-11 16:15:02
 -->
 # ChatRoom-App
 
 ### 简介 📖
 
-Vue3 + TypeScript + Vite6 + AntDesignVue + Pinia3 + Socket.IO
+Vue3 + TypeScript + Vite6 + ElementPlus + Pinia3 + Socket.IO
 
 ### 特性 ⭐
 
@@ -26,7 +26,7 @@ Vue3 + TypeScript + Vite6 + AntDesignVue + Pinia3 + Socket.IO
 - [TypeScript](https://www.typescriptlang.org/) - 熟悉 TypeScript 基本语法
 - [ES6+](http://es6.ruanyifeng.com/) - 熟悉 ES6 基本语法
 - [Pinia](https://pinia.vuejs.org/) - Pinia 基本使用
-- [Ant-Design-Vue](https://www.antdv.com) - Ant-Design-Vue 基本使用
+- [ElementPlus](https://element-plus.org/zh-CN/) - ElementPlus 基本使用
 - [Socket.IO](https://socket.io/zh-CN/) - Socket.IO 基本使用
 
 ### 安装使用 📔

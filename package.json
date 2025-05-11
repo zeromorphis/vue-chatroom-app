@@ -2,7 +2,7 @@
     "name": "vue-app",
     "private": true,
     "version": "3.0.0",
-    "description": "vue3 + vite6 + ts + antdv + pinia3",
+    "description": "vue3 + vite6 + ts + elementPlus + pinia3",
     "author": {
         "name": "言棠",
         "email": "zeromorphis@gmail.com"
@@ -17,14 +17,12 @@
         "preview": "vite preview"
     },
     "dependencies": {
-        "@ant-design/icons-vue": "^7.0.1",
         "@element-plus/icons-vue": "^2.3.1",
         "@types/js-cookie": "^3.0.6",
         "@types/nprogress": "^0.2.3",
         "@types/socket.io-client": "^3.0.0",
         "@vueuse/core": "^13.1.0",
         "animate.css": "^4.1.1",
-        "ant-design-vue": "^4.2.6",
         "element-plus": "^2.9.10",
         "axios": "^1.9.0",
         "clipboard": "^2.0.11",

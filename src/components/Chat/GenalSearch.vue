@@ -1,76 +1,82 @@
 <template>
   <div class="search_container">
     <div class="search-select">
-      <a-select show-search placeholder="搜索聊天组" :defaultActiveFirstOption="false" :showArrow="false" :filterOption="false" :notFoundContent="null" @search="handleSearchFun">
-        <a-select-option v-for="(chat, index) in searchData" :key="index" @click="selectChatFun(chat)">
-          <div v-if="chat.username">{{ chat.username }}</div>
-          <div v-if="chat.groupName">{{ chat.groupName }}</div>
-        </a-select-option>
-      </a-select>
-      <a-dropdown class="search-dropdown">
-        <plus-circle-outlined class="search-dropdown-button" />
-        <template #overlay>
-          <a-menu slot="overlay">
-            <a-menu-item>
-              <div @click="() => (visibleAddGroup = !visibleAddGroup)">创建群聊</div>
-            </a-menu-item>
-            <a-menu-divider />
-            <a-menu-item>
-              <div @click="() => (visibleJoinGroup = !visibleJoinGroup)">搜索群聊</div>
-            </a-menu-item>
-            <a-menu-divider />
-            <a-menu-item>
-              <div @click="() => (visibleAddFriend = !visibleAddFriend)">搜索用户</div>
-            </a-menu-item>
-          </a-menu>
+      <el-select v-model="selectChatValue" filterable placeholder="搜索聊天组" :filter-method="handleSearchFun">
+        <el-option v-for="(chat, index) in searchData" :key="index"
+          :label="chat.username ? chat.username : chat.groupName"
+          :value="chat.username ? chat.username : chat.groupName" @click="selectChatFun(chat)" />
+      </el-select>
+      <el-dropdown trigger="click" @command="handleEditGroupFun">
+        <el-icon class="search-dropdown-button">
+          <CirclePlus />
+        </el-icon>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item command="1">创建群聊</el-dropdown-item>
+            <el-dropdown-item command="2">搜索群聊</el-dropdown-item>
+            <el-dropdown-item command="3">搜索用户</el-dropdown-item>
+          </el-dropdown-menu>
         </template>
-      </a-dropdown>
+      </el-dropdown>
     </div>
     <!-- 创建群 -->
-    <a-modal v-model:open="visibleAddGroup" centered footer="" title="创建群">
-      <div style="display:flex">
-        <a-input v-model:value="groupName" placeholder="请输入群名字"></a-input>
-        <a-button @click="addGroupFun" type="primary">确定</a-button>
-      </div>
-    </a-modal>
+    <el-dialog v-model="visibleAddGroup" title="创建群" width="500" align-center>
+      <el-input v-model="groupName" placeholder="请输入群名字"></el-input>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="visibleAddGroup = false">取消</el-button>
+          <el-button type="primary" @click="addGroupFun">
+            确认
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
     <!-- 搜索群 -->
-    <a-modal v-model:open="visibleJoinGroup" centered footer="" title="搜索群">
+    <el-dialog v-model="visibleJoinGroup" title="搜索群" width="500" align-center>
       <div style="display:flex" v-if="visibleJoinGroup">
-        <a-select show-search placeholder="请输入群名字" style="width: 90%" :default-active-first-option="false" :show-arrow="false" :filter-option="false" :not-found-content="null" @search="handleGroupSearch" @change="handleGroupChange">
-          <a-select-option v-for="(group, index) in groupArr" :key="index" @click="handleGroupSelectFun(group)">
-            <div>{{ group.groupName }}</div>
-          </a-select-option>
-        </a-select>
-        <a-button @click="joinGroupFun" type="primary">加入群</a-button>
+        <el-select v-model="groupId" filterable remote placeholder="请输入群名字" :remote-method="handleGroupSearchFun">
+          <el-option v-for="(group, index) in groupArr" :key="index" :label="group.groupName" :value="group.groupId"
+            @change="handleGroupSelectFun(group)" />
+        </el-select>
       </div>
-    </a-modal>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="visibleJoinGroup = false">取消</el-button>
+          <el-button type="primary" @click="joinGroupFun">
+            加入群
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
     <!-- 搜索用户 -->
-    <a-modal v-model:open="visibleAddFriend" centered footer="" title="搜索用户">
+    <el-dialog v-model="visibleAddFriend" title="搜索用户" width="500" align-center>
       <div style="display:flex" v-if="visibleAddFriend">
-        <a-select show-search placeholder="请输入用户名" style="width: 90%" :default-active-first-option="false" :show-arrow="false" :filter-option="false" :not-found-content="null" @search="handleUserSearch" @change="handleUserChange">
-          <a-select-option v-for="(user, index) in userArr" :key="index" @click="handleUserSelect(user)">
-            <div>{{ user.username }}</div>
-          </a-select-option>
-        </a-select>
-        <a-button @click="addFriendFun" type="primary">添加好友</a-button>
+        <el-select v-model="friendId" filterable remote placeholder="请输入用户名" :remote-method="handleUserSearchFun">
+          <el-option v-for="(user, index) in userArr" :key="index" :label="user.username" :value="user.userId"
+            @change="handleUserSelectFun(user)" />
+        </el-select>
       </div>
-    </a-modal>
+      <template #footer>
+        <div class="dialog-footer">
+          <el-button @click="visibleAddFriend = false">取消</el-button>
+          <el-button type="primary" @click="addFriendFun">
+            添加好友
+          </el-button>
+        </div>
+      </template>
+    </el-dialog>
   </div>
 </template>
 
 <script lang="ts">
 import { ref, onBeforeMount, computed, watch, defineComponent, SetupContext } from "vue";
-import { PlusCircleOutlined } from '@ant-design/icons-vue';
 import { useChatStoreWithOut } from '@/store/modules/chat';
 import { getGroupsByNameApi } from "@/api/modules/group";
 import { getUsersByNameApi } from "@/api/modules/user";
 import { nameVerify, isContainStr } from '@/utils/common';
-import { message } from 'ant-design-vue';
+import { ElNotification } from "element-plus";
 export default defineComponent({
   name: "GenalSearch",
-  components: {
-    PlusCircleOutlined,
-  },
   emits: ['setActiveRoom', 'addGroup', 'joinGroup', 'addFriend'],
   setup(props, content: SetupContext) {
     const useChatStore = useChatStoreWithOut();
@@ -79,12 +85,14 @@ export default defineComponent({
     const visibleAddGroup = ref<boolean>(false);
     const visibleJoinGroup = ref<boolean>(false);
     const visibleAddFriend = ref<boolean>(false);
+
     const groupName = ref<string>('');
     const searchData = ref<Array<Group | Friend>>([]);
     const groupId = ref<string>('');
     const groupArr = ref<Array<Group>>([]);
     const friendId = ref<string>('');
     const userArr = ref<Array<User>>([]);
+    const selectChatValue = ref<string>('');
 
     onBeforeMount(async () => {
       getSearchData();
@@ -103,12 +111,15 @@ export default defineComponent({
         if (chat.username) {
           if (isContainStr(value, chat.username)) {
             mySearchData.push(chat);
+            searchData.value = mySearchData;
           }
-        } else if (isContainStr(value, chat.groupName)) {
-          mySearchData.push(chat);
+        } else {
+          if (isContainStr(value, chat.groupName)) {
+            mySearchData.push(chat);
+            searchData.value = mySearchData;
+          }
         }
       }
-      searchData.value = mySearchData;
     }
 
     function selectChatFun(activeRoom: User & Group) {
@@ -126,19 +137,20 @@ export default defineComponent({
       groupName.value = '';
     }
 
-    async function handleGroupSearch(value: string) {
+    async function handleGroupSearchFun(value: string) {
       if (!value) {
         return;
       }
       getGroupsByNameApi(value).then((res: any) => {
         groupArr.value = res.data;
       }).catch((err: any) => {
-        message.error(err.msg);
+        ElNotification({
+          title: 'Error',
+          message: err.msg,
+          type: "error",
+          duration: 1500
+        });
       });
-    }
-
-    function handleGroupChange() {
-      groupArr.value = [];
     }
 
     function handleGroupSelectFun(group: Group) {
@@ -147,27 +159,29 @@ export default defineComponent({
 
     // 加入群
     function joinGroupFun() {
+      console.log(groupId.value, "groupId");
       visibleJoinGroup.value = false;
       content.emit('joinGroup', groupId.value);
       groupId.value = '';
     }
 
-    async function handleUserSearch(value: string) {
+    async function handleUserSearchFun(value: string) {
       if (!value) {
         return;
       }
       getUsersByNameApi(value).then((res: any) => {
         userArr.value = res.data;
       }).catch((err: any) => {
-        message.error(err.msg);
+        ElNotification({
+          title: 'Error',
+          message: err.msg,
+          type: "error",
+          duration: 1500
+        });
       });
     }
 
-    function handleUserChange() {
-      userArr.value = [];
-    }
-
-    function handleUserSelect(friend: Friend) {
+    function handleUserSelectFun(friend: Friend) {
       friendId.value = friend.userId;
     }
 
@@ -178,7 +192,24 @@ export default defineComponent({
       friendId.value = '';
     }
 
+    const handleEditGroupFun = (type: string) => {
+      switch (type) {
+        case '1':
+          visibleAddGroup.value = true;
+          break;
+        case '2':
+          visibleJoinGroup.value = true;
+          break;
+        case '3':
+          visibleAddFriend.value = true;
+          break;
+      }
+    };
+
     return {
+      selectChatValue,
+      groupId,
+      friendId,
       searchData,
       handleSearchFun,
       selectChatFun,
@@ -187,16 +218,15 @@ export default defineComponent({
       addGroupFun,
       visibleJoinGroup,
       groupArr,
-      handleGroupSearch,
-      handleGroupChange,
+      handleGroupSearchFun,
       handleGroupSelectFun,
       joinGroupFun,
       visibleAddFriend,
       userArr,
-      handleUserSearch,
-      handleUserSelect,
-      handleUserChange,
-      addFriendFun
+      handleUserSearchFun,
+      handleUserSelectFun,
+      addFriendFun,
+      handleEditGroupFun,
     };
   },
 });
@@ -209,24 +239,24 @@ export default defineComponent({
   padding: 10px;
   display: flex;
   align-items: center;
+
   .search-select {
     width: 100%;
-    .ant-select {
+    display: flex;
+    align-items: center;
+
+    .el-select {
       width: 100%;
     }
-  }
-  .search-dropdown {
-    position: absolute;
-    right: 10px;
-    top: 13px;
-    width: 40px;
-    height: 34px;
-    font-size: 20px;
-    cursor: pointer;
-    line-height: 40px;
-    color: gray;
-    transition: 0.2s all linear;
-    border-radius: 4px;
+
+    .search-dropdown-button {
+      width: 40px;
+      font-size: 25px;
+      cursor: pointer;
+      line-height: 40px;
+      color: gray;
+      transition: 0.2s all linear;
+    }
   }
 }
 </style>

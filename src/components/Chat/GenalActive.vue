@@ -1,9 +1,8 @@
 <template>
   <div class="active_container">
     <div v-if="type === 'group'">
-      <el-icon @click="() => (showGroupUser = !showGroupUser)" class="active-button"
-        :class="{ 'heightLight': showGroupUser }">
-        <UserFilled />
+      <el-icon @click="() => (showGroupUser = !showGroupUser)" class="active-button" :class="{ 'heightLight': showGroupUser }">
+        <User />
       </el-icon>
       <el-drawer class="acitve-drawer" direction="rtl" v-model="showGroupUser" @close="showGroupUser = false" size='45%'
         :with-header="false">

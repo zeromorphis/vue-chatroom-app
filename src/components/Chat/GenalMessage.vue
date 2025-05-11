@@ -3,9 +3,10 @@
     <div class="message-header">
       <div class="message-header-box">
         <div ref='headerDom' class="message-header-text">
-          <div v-if="groupGather[activeRoom.groupId]" class="nickname">{{ groupGather[activeRoom.groupId].groupName }}</div>
+          <div v-if="groupGather[activeRoom.groupId]" class="nickname">{{ groupGather[activeRoom.groupId].groupName }}
+          </div>
           <div v-if="groupGather[activeRoom.groupId]" class="notice">
-            <a-badge color="#f50" :text="groupGather[activeRoom.groupId].notice" />
+            <el-badge is-dot>{{ groupGather[activeRoom.groupId].notice }}</el-badge>
           </div>
           <div v-else class="nickname">{{ userGather[activeRoom.userId].username }}</div>
         </div>
@@ -13,23 +14,29 @@
     </div>
     <transition name="loading">
       <div class="message-loading" v-if="spinning && !isNoData">
-        <sync-outlined spin class="message-loading-icon" />
+        <el-icon class="message-loading-icon">
+          <Refresh />
+        </el-icon>
       </div>
     </transition>
     <div ref="messageDom" class="message-main" :style="{ opacity: messageOpacity }">
       <div ref="messageContentDom" class="message-content">
         <transition v-if="isNoData" name="noData">
-          <a-divider class="message-content-noData" style="border-color: #999" dashed plain orientation="center">
+          <el-divider class="message-content-noData" style="border-color: #999">
             没有更多消息了
-          </a-divider>
+          </el-divider>
         </transition>
         <template v-for="item in activeRoom.messages" :key="item.userId + item.time">
-          <div class="message-content-message" :class="{ 'message-content-message-right': item.userId === userinfo.userId }">
+          <div class="message-content-message"
+            :class="{ 'message-content-message-right': item.userId === userinfo.userId }">
             <genalAvatar :data="item" :showTime="true" />
             <div class="message-content-box">
-              <a class="message-content-link" v-if="isUrl(item.content)" :href="item.content" target="_blank">{{ item.content }}</a>
-              <div class="message-content-text" v-text="parseText(item.content)" v-else-if="item.messageType === 'text'"></div>
-              <div class="message-content-image" v-if="item.messageType === 'image'" :style="getImageStyle(item.content)">
+              <a class="message-content-link" v-if="isUrl(item.content)" :href="item.content" target="_blank">{{
+                item.content }}</a>
+              <div class="message-content-text" v-text="parseText(item.content)"
+                v-else-if="item.messageType === 'text'"></div>
+              <div class="message-content-image" v-if="item.messageType === 'image'"
+                :style="getImageStyle(item.content)">
                 <viewer style="display:flex;align-items:center;">
                   <img :src="'api/static/' + item.content" alt="" />
                 </viewer>
@@ -45,7 +52,6 @@
 
 <script lang="ts">
 import { ref, onMounted, computed, watch, nextTick, defineComponent } from "vue";
-import { SyncOutlined } from '@ant-design/icons-vue';
 import { useUserStoreWithOut } from '@/store/modules/user';
 import { useChatStoreWithOut } from '@/store/modules/chat';
 import { getGroupMessagesApi } from "@/api/modules/group";
@@ -56,7 +62,6 @@ import GenalInput from './GenalInput.vue';
 export default defineComponent({
   name: "GenalSearch",
   components: {
-    SyncOutlined,
     GenalAvatar,
     GenalInput,
   },
@@ -237,44 +242,53 @@ export default defineComponent({
   width: 100%;
   overflow: hidden;
   height: 100%;
+
   .message-header {
     width: 100%;
     height: 60px;
     padding: 0 100px;
     background-color: rgb(0, 0, 0, 0.6);
+
     .message-header-box {
       height: 100%;
       position: relative;
+
       .message-header-text {
         height: 100%;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
+
         .nickname {
           color: #fff;
           font-size: 16px;
           line-height: 16px;
         }
+
         .notice {
           margin-top: 6px;
           line-height: 12px;
+
           :deep(.ant-badge-status-text) {
             color: #fff;
             font-size: 12px;
           }
         }
       }
+
       .message-header-icon {
         margin-left: 5px;
       }
     }
   }
+
   .message-loading {
     position: absolute;
     left: calc(50% - 18px);
     top: 60px;
     z-index: 99;
+
     .message-loading-icon {
       margin: 10px auto;
       font-size: 20px;
@@ -283,21 +297,26 @@ export default defineComponent({
       background-color: rgb(0, 0, 0, 0.8);
     }
   }
+
   .message-main {
     height: calc(100% - 100px);
     overflow: auto;
     position: relative;
+
     .message-content {
       .message-content-noData {
         font-size: 14px;
         color: #fff;
       }
+
       .message-content-message {
         margin: 15px 20px;
         text-align: left;
+
         .message-content-box {
           margin-top: 5px;
           display: flex;
+
           .message-content-link,
           .message-content-text {
             max-width: 60%;
@@ -309,14 +328,17 @@ export default defineComponent({
             border-radius: 5px;
             word-break: break-all;
           }
+
           .message-content-link {
             color: rgb(69, 87, 131);
           }
+
           .message-content-image {
             width: 200px;
             display: block;
             border-radius: 5px;
             overflow: hidden;
+
             img {
               width: 100%;
               height: auto;
@@ -326,15 +348,18 @@ export default defineComponent({
           }
         }
       }
+
       .message-content-message-right {
         .message-content-box {
           display: flex;
           justify-content: flex-end;
+
           .message-content-link,
           .message-content-text {
             display: inline-block;
             background-color: rgb(169, 233, 122);
           }
+
           .message-content-image {
             display: block;
           }
@@ -342,15 +367,18 @@ export default defineComponent({
       }
     }
   }
+
   .message-input {
     display: flex;
     flex-wrap: nowrap;
     position: absolute;
     width: 100%;
     bottom: 0px;
+
     input {
       height: 40px;
     }
+
     .message-input-button {
       width: 30px;
       cursor: pointer;
@@ -365,6 +393,7 @@ export default defineComponent({
 .ant-input {
   padding: 0 50px 0 50px;
 }
+
 // 消息工具样式
 .messagte-tool-icon {
   position: absolute;
@@ -378,22 +407,27 @@ export default defineComponent({
   cursor: pointer;
   z-index: 99;
 }
+
 .message-tool-item {
   width: 0px;
   height: 240px;
   cursor: pointer;
+
   .message-tool-contant {
     width: 50px;
     padding: 5px;
     border-radius: 5px;
     transition: all linear 0.2s;
+
     .message-tool-item-img {
       width: 40px;
     }
+
     .message-tool-item-text {
       text-align: center;
       font-size: 10px;
     }
+
     &:hover {
       background: rgba(135, 206, 235, 0.6);
     }
@@ -412,6 +446,7 @@ export default defineComponent({
         }
       }
     }
+
     .message-main {
       .message-content-image {
         img {
@@ -432,10 +467,12 @@ export default defineComponent({
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+
         .notice {
           display: none;
         }
       }
+
       .message-header-icon {
         position: absolute;
         top: 17px;
@@ -445,12 +482,15 @@ export default defineComponent({
     }
   }
 }
+
 .loading-enter-active {
   transition: all 0.3s ease;
 }
+
 .loading-leave-active {
   transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
 }
+
 .loading-enter,
 .loading-leave-to {
   transform: translateY(-30px);
@@ -461,6 +501,7 @@ export default defineComponent({
 .noData-leave-active {
   transition: opacity 1s;
 }
+
 .noData-enter,
 .noData-leave-to {
   opacity: 0;
@@ -470,15 +511,18 @@ export default defineComponent({
   display: inline-block;
   animation: transition 0.4s ease;
 }
+
 @keyframes transition {
   0% {
     transform: translateY(-40px);
     opacity: 0;
   }
+
   60% {
     transform: translateY(10px);
     opacity: 0.6;
   }
+
   100% {
     transform: translateY(0px);
     opacity: 1;

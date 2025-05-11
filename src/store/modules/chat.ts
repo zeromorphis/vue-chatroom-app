@@ -4,7 +4,7 @@
  * @Descripttion: 授人以渔，功德无量，利在千秋
  * @Date: 2022-04-14 20:56:23
  * @LastEditors: YT
- * @LastEditTime: 2025-05-10 18:30:39
+ * @LastEditTime: 2025-05-11 16:10:45
  */
 import { defineStore } from "pinia";
 import { store } from "@/store";
@@ -13,7 +13,7 @@ import piniaPersistConfig from "../utils/piniaPersist";
 import { DEFAULT_GROUP_ID } from "@/config/config";
 import { useUserStoreWithOut } from "@/store/modules/user";
 import { io } from "socket.io-client";
-import { message } from "ant-design-vue";
+import { ElNotification } from "element-plus";
 
 export const useChatStore = defineStore("chat", {
   state: (): ChatState => {
@@ -133,7 +133,7 @@ export const useChatStore = defineStore("chat", {
       const socket: SocketIOClient.Socket = io("ws://192.168.0.106:12345", {
         path: "/socket.io",
         transports: ["websocket"], // 👈 显式要求使用 websocket
-        query: { userId: userinfo.userId }
+        query: { userId: userinfo.userId },
       });
 
       // 建立连接
@@ -157,22 +157,45 @@ export const useChatStore = defineStore("chat", {
       socket.on("addGroup", (res: ServerRes) => {
         console.log("on addGroup", res);
         if (res.code) {
-          return message.error(res.msg);
+          ElNotification({
+            title: "Error",
+            message: res.msg,
+            type: "error",
+            duration: 1500,
+          });
+          return;
         }
-        message.success(res.msg);
+        ElNotification({
+          title: "Success",
+          message: res.msg,
+          type: "success",
+          duration: 1500,
+        });
         this.SET_GROUP_GATHER(res.data);
       });
 
       socket.on("joinGroup", async (res: ServerRes) => {
         console.log("on joinGroup", res);
         if (res.code) {
-          return message.error(res.msg);
+          ElNotification({
+            title: "Error",
+            message: res.msg,
+            type: "error",
+            duration: 1500,
+          });
+          return;
         }
         let newUser = res.data.user;
         let group = res.data.group;
         if (newUser.userId != userinfo.userId) {
           this.SET_USER_GATHER(newUser);
-          return message.info(`${newUser.username}加入群${group.groupName}`);
+          ElNotification({
+            title: "Info",
+            message: `${newUser.username}加入群${group.groupName}`,
+            type: "info",
+            duration: 1500,
+          });
+          return;
         } else {
           console.log(this.groupGather, group.groupId);
           // 是用户自己 则加入到某个群
@@ -181,7 +204,12 @@ export const useChatStore = defineStore("chat", {
             // 获取群里面所有用户的用户信息
             socket.emit("chatData", userinfo);
           }
-          message.info(`成功加入群${group.groupName}`);
+          ElNotification({
+            title: "Success",
+            message: `成功加入群${group.groupName}`,
+            type: "success",
+            duration: 1500,
+          });
           this.SET_ACTIVE_ROOM(this.groupGather[group.groupId]);
         }
       });
@@ -189,7 +217,13 @@ export const useChatStore = defineStore("chat", {
       socket.on("joinGroupSocket", (res: ServerRes) => {
         console.log("on joinGroupSocket", res);
         if (res.code) {
-          return message.error(res.msg);
+          ElNotification({
+            title: "Error",
+            message: res.msg,
+            type: "error",
+            duration: 1500,
+          });
+          return;
         }
         let newUser: Friend = res.data.user;
         let group: Group = res.data.group;
@@ -211,7 +245,13 @@ export const useChatStore = defineStore("chat", {
           }
           // @ts-ignore
           window.msg = newUser.userId;
-          return message.info(`${newUser.username}加入群${group.groupName}`);
+          ElNotification({
+            title: "Info",
+            message: `${newUser.username}加入群${group.groupName}`,
+            type: "info",
+            duration: 1500,
+          });
+          return;
         } else {
           if (!this.groupGather[group.groupId]) {
             this.SET_GROUP_GATHER(group);
@@ -229,7 +269,12 @@ export const useChatStore = defineStore("chat", {
             this.ADD_UNREAD_GATHER(res.data.groupId);
           }
         } else {
-          message.error(res.msg);
+          ElNotification({
+            title: "Error",
+            message: res.msg,
+            type: "error",
+            duration: 1500,
+          });
         }
       });
 
@@ -238,13 +283,23 @@ export const useChatStore = defineStore("chat", {
         if (!res.code) {
           this.SET_FRIEND_GATHER(res.data);
           this.SET_USER_GATHER(res.data);
-          message.info(res.msg);
+          ElNotification({
+            title: "Info",
+            message: res.msg,
+            type: "info",
+            duration: 1500,
+          });
           socket.emit("joinFriendSocket", {
             userId: userinfo.userId,
             friendId: res.data.userId,
           });
         } else {
-          message.error(res.msg);
+          ElNotification({
+            title: "Error",
+            message: res.msg,
+            type: "error",
+            duration: 1500,
+          });
         }
       });
 
@@ -274,13 +329,24 @@ export const useChatStore = defineStore("chat", {
             }
           }
         } else {
-          message.error(res.msg);
+          ElNotification({
+            title: "Error",
+            message: res.msg,
+            type: "error",
+            duration: 1500,
+          });
         }
       });
 
       socket.on("chatData", (res: ServerRes) => {
         if (res.code) {
-          return message.error(res.msg);
+          ElNotification({
+            title: "Error",
+            message: res.msg,
+            type: "error",
+            duration: 1500,
+          });
+          return;
         }
         this.handleChatData(res.data);
         this.SET_DROPPED(false);
@@ -291,9 +357,19 @@ export const useChatStore = defineStore("chat", {
         if (!res.code) {
           this.SET_ACTIVE_ROOM(res.data);
           this.SET_GROUP_GATHER(res.data);
-          message.success(res.msg);
+          ElNotification({
+            title: "Success",
+            message: res.msg,
+            type: "success",
+            duration: 1500,
+          });
         } else {
-          message.error(res.msg);
+          ElNotification({
+            title: "Error",
+            message: res.msg,
+            type: "error",
+            duration: 1500,
+          });
         }
       });
 
@@ -302,9 +378,19 @@ export const useChatStore = defineStore("chat", {
         if (!res.code) {
           this.SET_ACTIVE_ROOM(res.data);
           this.SET_GROUP_GATHER(res.data);
-          message.success(res.msg);
+          ElNotification({
+            title: "Success",
+            message: res.msg,
+            type: "success",
+            duration: 1500,
+          });
         } else {
-          message.error(res.msg);
+          ElNotification({
+            title: "Error",
+            message: res.msg,
+            type: "error",
+            duration: 1500,
+          });
         }
       });
 
@@ -312,9 +398,19 @@ export const useChatStore = defineStore("chat", {
         if (!res.code) {
           this.DEL_GROUP(res.data);
           this.SET_ACTIVE_ROOM(this.groupGather[DEFAULT_GROUP_ID]);
-          message.success(res.msg);
+          ElNotification({
+            title: "Success",
+            message: res.msg,
+            type: "success",
+            duration: 1500,
+          });
         } else {
-          message.error(res.msg);
+          ElNotification({
+            title: "Error",
+            message: res.msg,
+            type: "error",
+            duration: 1500,
+          });
         }
       });
 
@@ -322,9 +418,19 @@ export const useChatStore = defineStore("chat", {
         if (!res.code) {
           this.DEL_FRIEND(res.data);
           this.SET_ACTIVE_ROOM(this.groupGather[DEFAULT_GROUP_ID]);
-          message.success(res.msg);
+          ElNotification({
+            title: "Success",
+            message: res.msg,
+            type: "success",
+            duration: 1500,
+          });
         } else {
-          message.error(res.msg);
+          ElNotification({
+            title: "Error",
+            message: res.msg,
+            type: "error",
+            duration: 1500,
+          });
         }
       });
     },

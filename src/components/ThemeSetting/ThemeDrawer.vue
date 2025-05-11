@@ -2,7 +2,7 @@
  * @Author: YT
  * @Date: 2025-05-10 17:15:18
  * @LastEditors: YT
- * @LastEditTime: 2025-05-10 21:31:56
+ * @LastEditTime: 2025-05-11 16:00:52
  * @Description: 当时只道是寻常
  * @FilePath: /dev/vue-chatroom-app/src/components/ThemeSetting/ThemeDrawer.vue
 -->
@@ -39,7 +39,6 @@ import { useTheme } from "@/hooks/useTheme";
 import { useGlobalStoreWithOut } from '@/store/modules/global';
 import mittBus from "@/utils/mittBus";
 import SwitchDark from "@/components/SwitchDark/index.vue";
-import { ConfigProvider } from 'ant-design-vue';
 
 const { changePrimary, changeGreyOrWeak } = useTheme();
 

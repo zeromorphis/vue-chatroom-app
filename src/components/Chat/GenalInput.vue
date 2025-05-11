@@ -3,32 +3,33 @@
  * @version: 5.0.0
  * @Author: 言棠
  * @Date: 2022-11-30 18:01:37
- * @LastEditors: 言棠
- * @LastEditTime: 2022-12-29 10:44:10
+ * @LastEditors: YT
+ * @LastEditTime: 2025-05-11 16:13:48
 -->
 <template>
   <div class="messageInput_container" v-if="activeRoom">
-    <a-popover placement="topLeft" trigger="hover" class="message-popver">
-      <template #content>
-        <a-tabs default-key="1" size="small">
-          <a-tab-pane key="1" tab="Emoji">
-            <GenalEmoji @addEmoji="addEmoji" />
-          </a-tab-pane>
-          <a-tab-pane key="2" tab="工具">
-            <div class="message-tool-item">
-              <a-upload :show-upload-list="false" :before-upload="beforeImgUpload">
-                <div class="message-tool-contant">
-                  <img src="@/assets/images/chat/photo.png" class="message-tool-item-img" alt="" />
-                  <div class="message-tool-item-text">图片</div>
-                </div>
-              </a-upload>
-            </div>
-          </a-tab-pane>
-        </a-tabs>
+    <el-popover placement="top-start" trigger="hover" width="280" class="message-popver">
+      <template #reference>
+        <div class="messagte-tool-icon">😃</div>
       </template>
-      <div class="messagte-tool-icon">😃</div>
-    </a-popover>
-    <a-input autocomplete="off" type="text" placeholder="说点什么" v-model:value="text" ref="inoutDom" autoFocus style="color:#000;" @pressEnter="preSendMessage()" />
+      <el-tabs v-model="activeKey" :stretch="true">
+        <el-tab-pane label="Emoji" name="1">
+          <GenalEmoji @addEmoji="addEmoji" />
+        </el-tab-pane>
+        <el-tab-pane label="工具" name="2">
+          <div class="message-tool-item">
+            <el-upload :show-file-list="false" :before-upload="beforeImgUpload">
+              <div class="message-tool-contant">
+                <img src="@/assets/images/chat/photo.png" class="message-tool-item-img" alt="" />
+                <div class="message-tool-item-text">图片</div>
+              </div>
+            </el-upload>
+          </div>
+        </el-tab-pane>
+      </el-tabs>
+    </el-popover>
+    <el-input autocomplete="off" type="text" placeholder="说点什么" v-model="text" ref="inoutDom" autoFocus
+      style="color:#000;" @change="preSendMessage()" />
     <img class="message-input-button" @click="preSendMessage()" src="@/assets/images/chat/send.png" alt="" />
   </div>
 </template>
@@ -40,7 +41,7 @@ import { useChatStoreWithOut } from '@/store/modules/chat';
 import { useGlobalStoreWithOut } from '@/store/modules/global';
 import GenalEmoji from './GenalEmoji.vue';
 import { throttle } from 'throttle-debounce';
-import { message } from 'ant-design-vue';
+import { ElNotification } from "element-plus";
 export default defineComponent({
   name: "GenalInput",
   components: {
@@ -56,6 +57,8 @@ export default defineComponent({
     const socket = computed<SocketIOClient.Socket>(() => useChatStore.socket);
     const text = ref<string>('');
     const inoutDom = ref<HTMLElement>(null);
+    const activeKey = ref('1');
+
 
     onBeforeMount(() => {
       initPaste();
@@ -91,11 +94,21 @@ export default defineComponent({
     // 消息发送前校验-节流
     const preSendMessage = throttle(1000, () => {
       if (!text.value.trim()) {
-        message.error('不能发送空消息!');
+        ElNotification({
+          title: 'Error',
+          message: "不能发送空消息!",
+          type: "error",
+          duration: 1500
+        });
         return;
       }
       if (text.value.length > 220) {
-        message.error('消息太长!');
+        ElNotification({
+          title: 'Error',
+          message: "消息太长!",
+          type: "error",
+          duration: 1500
+        });
         return;
       }
       if (activeRoom.value.groupId) {
@@ -203,11 +216,11 @@ export default defineComponent({
     const handleImgUpload = throttle(1000, async (imageFile: File) => {
       const isJpgOrPng = imageFile.type === 'image/jpeg' || imageFile.type === 'image/png' || imageFile.type === 'image/jpg' || imageFile.type === 'image/gif';
       if (!isJpgOrPng) {
-        return message.error('请选择jpeg/jpg/png/gif格式的图片!');
+        return ElNotification.error('请选择jpeg/jpg/png/gif格式的图片!');
       }
       const isLt1M = imageFile.size / 1024 / 1024 < 0.5;
       if (!isLt1M) {
-        return message.error('图片必须小于500K!');
+        return ElNotification.error('图片必须小于500K!');
       }
       let image = new Image();
       let url = window.URL || window.webkitURL;
@@ -225,6 +238,7 @@ export default defineComponent({
     });
 
     return {
+      activeKey,
       activeRoom,
       beforeImgUpload,
       preSendMessage,
@@ -239,31 +253,59 @@ export default defineComponent({
 <style lang="scss" scoped>
 .messageInput_container {
   display: flex;
+  align-items: center;
   flex-wrap: nowrap;
   position: absolute;
   width: 100%;
   bottom: 0px;
+  background-color: #fff;
+
   input {
     height: 40px;
   }
+
   .message-input-button {
     width: 30px;
     cursor: pointer;
     position: absolute;
     right: 10px;
-    top: 4px;
   }
 }
 
 //输入框样式
-.ant-input {
+.el-input {
   padding: 0 50px 0 50px;
+  height: 40px;
 }
+
+.el-tab-pane {
+  display: flex;
+  justify-content: center;
+}
+
+:deep(.el-input__wrapper) {
+  box-shadow: none;
+}
+
+.el-input__inner {
+  padding: 0 50px 0 50px;
+  height: 40px;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+  border: none;
+  box-shadow: none;
+
+  &:focus {
+    box-shadow: none;
+    border: none;
+    outline: none;
+  }
+}
+
 // 消息工具样式
 .messagte-tool-icon {
   position: absolute;
   left: 0;
-  top: 0;
   width: 50px;
   height: 40px;
   text-align: center;
@@ -272,22 +314,27 @@ export default defineComponent({
   cursor: pointer;
   z-index: 99;
 }
+
 .message-tool-item {
   width: 250px;
   height: 240px;
   cursor: pointer;
+
   .message-tool-contant {
     width: 50px;
     padding: 5px;
     border-radius: 5px;
     transition: all linear 0.2s;
+
     .message-tool-item-img {
       width: 40px;
     }
+
     .message-tool-item-text {
       text-align: center;
       font-size: 10px;
     }
+
     &:hover {
       background: rgba(135, 206, 235, 0.6);
     }

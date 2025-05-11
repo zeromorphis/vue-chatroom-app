@@ -3,7 +3,7 @@
  * @version: 1024
  * @Descripttion: 当时只道是寻常
  * @Date: 2025-05-03 16:34:36
- * @LastEditTime: 2025-05-03 16:44:56
+ * @LastEditTime: 2025-05-11 15:54:33
  */
 /**
  * v-copy
@@ -12,7 +12,7 @@
  */
 
 import type { Directive, DirectiveBinding } from "vue";
-import { message } from 'ant-design-vue';
+import { ElNotification } from "element-plus";
 interface ElType extends HTMLElement {
   copyData: string | number;
 }
@@ -26,13 +26,18 @@ const copy: Directive = {
   },
   beforeUnmount(el: ElType) {
     el.removeEventListener("click", handleClick);
-  }
+  },
 };
 
 async function handleClick(this: any) {
   try {
     await navigator.clipboard.writeText(this.copyData);
-    message.success("复制成功")
+    ElNotification({
+      title: "Success",
+      message: "复制成功",
+      type: "success",
+      duration: 1500,
+    });
   } catch (err) {
     console.error("复制操作不被支持或失败: ", err);
   }

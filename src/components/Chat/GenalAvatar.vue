@@ -3,26 +3,28 @@
  * @version: 5.0.0
  * @Author: 言棠
  * @Date: 2022-11-30 16:20:43
- * @LastEditors: 言棠
- * @LastEditTime: 2022-12-09 14:47:50
+ * @LastEditors: YT
+ * @LastEditTime: 2025-05-11 10:53:55
 -->
 <template>
   <div class="avatar_container" v-if="userGather[data.userId]">
     <div v-if="data.userId !== userinfo.userId" class="noHasSelf">
-      <a-popover trigger="click">
-        <template #content>
-          <div class="avatar-card">
-            <a-avatar shape="square" :size="60" :src="userGather[data.userId].avatar" />
-            <div>{{ userGather[data.userId].username }}</div>
-            <a-button v-if="userinfo.role === 'admin'" style="margin-bottom: 5px;" @click="deleteUser(data.userId)" type="primary">
-              删除用户
-            </a-button>
-            <a-button @click="setActiveRoom(data.userId)" type="primary" v-if="friendGather[data.userId]">进入私聊</a-button>
-            <a-button @click="addFriend(data.userId)" type="primary" v-else>添加好友</a-button>
-          </div>
+      <el-popover trigger="click">
+        <template #reference>
+          <el-avatar shape="square" :size="32" :src="userGather[data.userId].avatar" />
         </template>
-        <a-avatar shape="square" :size="32" :src="userGather[data.userId].avatar" />
-      </a-popover>
+        <div class="avatar-card">
+          <el-avatar shape="square" :size="60" :src="userGather[data.userId].avatar" />
+          <div>{{ userGather[data.userId].username }}</div>
+          <el-button v-if="userinfo.role === 'admin'" style="margin-bottom: 5px;" @click="deleteUser(data.userId)"
+            type="primary">
+            删除用户
+          </el-button>
+          <el-button @click="setActiveRoom(data.userId)" type="primary"
+            v-if="friendGather[data.userId]">进入私聊</el-button>
+          <el-button @click="addFriend(data.userId)" type="primary" v-else>添加好友</el-button>
+        </div>
+      </el-popover>
       <div class="userinfo-wrap">
         <span class="avatar-name">{{ userGather[data.userId].username }}</span>
         <span class="avatar-time" v-if="showTime">{{ formatTime(data.time) }}</span>
@@ -33,10 +35,10 @@
         <span class="avatar-time" v-if="showTime">{{ formatTime(data.time) }}</span>
         <span class="avatar-name">{{ userGather[data.userId].username }}</span>
       </div>
-      <a-avatar shape="square" :size="32" :src="userGather[data.userId].avatar" />
+      <el-avatar shape="square" :size="32" :src="userGather[data.userId].avatar" />
     </div>
     <div v-if="data.userId === userinfo.userId && showGroupList" class="has-self-left">
-      <a-avatar shape="square" :size="32" :src="userGather[data.userId].avatar" />
+      <el-avatar shape="square" :size="32" :src="userGather[data.userId].avatar" />
       <div class="userinfo-wrap">
         <span class="avatar-name">{{ userGather[data.userId].username }}</span>
         <span class="avatar-time" v-if="showTime">{{ formatTime(data.time) }}</span>
@@ -51,7 +53,7 @@ import { useUserStoreWithOut } from '@/store/modules/user';
 import { useChatStoreWithOut } from '@/store/modules/chat';
 import { deleteUserApi } from '@/api/modules/user';
 import { formatTime } from '@/utils/common';
-import { message } from 'ant-design-vue';
+import { ElNotification } from "element-plus";
 export default defineComponent({
   name: "GenalAvatar",
   props: {
@@ -94,9 +96,19 @@ export default defineComponent({
     async function deleteUser(userId: string) {
       try {
         let res = await deleteUserApi({ uid: userinfo.value.userId, psw: userinfo.value.password, did: userId });
-        message.success(res.msg);
+        ElNotification({
+          title: 'Success',
+          message: res.msg,
+          type: "success",
+          duration: 1500
+        });
       } catch (error) {
-        message.error(error.msg);
+        ElNotification({
+          title: "Error",
+          message: error.msg,
+          type: "error",
+          duration: 1500
+        });
       }
     }
 
@@ -118,18 +130,22 @@ export default defineComponent({
   display: flex;
   align-items: center;
   height: 37px;
+
   .noHasSelf,
   .has-self-left {
     width: 100%;
     display: flex;
     align-items: center;
+
     .userinfo-wrap {
       display: flex;
       align-items: center;
+
       .avatar-name {
         margin-left: 5px;
         font-size: 14px;
       }
+
       .avatar-time {
         font-size: 12px;
         color: rgb(255, 255, 255, 0.75);
@@ -137,10 +153,12 @@ export default defineComponent({
       }
     }
   }
+
   .hasSelf {
     width: 100%;
     display: flex;
     justify-content: flex-end;
+
     .userinfo-wrap {
       display: flex;
       align-items: center;
@@ -150,6 +168,7 @@ export default defineComponent({
         color: rgb(255, 255, 255, 0.75);
         margin-right: 3px;
       }
+
       .avatar-name {
         margin-right: 5px;
         font-size: 14px;
@@ -157,12 +176,14 @@ export default defineComponent({
     }
   }
 }
+
 .avatar-card {
   display: flex;
   font-size: 18px;
   flex-direction: column;
   align-items: center;
-  > div {
+
+  >div {
     margin: 4px;
   }
 }
