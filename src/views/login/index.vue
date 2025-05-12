@@ -4,10 +4,10 @@
  * @Author: 言棠
  * @Date: 2022-12-05 10:14:40
  * @LastEditors: YT
- * @LastEditTime: 2025-05-10 20:18:32
+ * @LastEditTime: 2025-05-12 20:26:00
 -->
 <template>
-  <div class="login-container flx-center">
+  <div class="login-container flex-center">
     <div class="login-box">
       <div class="login-left">
         <img src="@/assets/images/login/group-chat.svg" alt="login" />
