@@ -9,12 +9,12 @@
 import type { App } from 'vue';
 import { createRouter, createWebHashHistory, createWebHistory, Router } from "vue-router";
 import routes from "./routes";
-import NProgress from "@/utils/nprogress";
 import { useUserStoreWithOut } from '@/store/modules/user';
 import { useChatStoreWithOut } from '@/store/modules/chat';
 import { useGlobalStoreWithOut } from '@/store/modules/global';
 import { AxiosCanceler } from "@/api/helper/axiosCancel";
 import { LOGIN_URL, ROUTER_WHITE_LIST } from "@/config/config";
+import NProgress from "@/utils/nprogress";
 
 const axiosCanceler = new AxiosCanceler();
 
@@ -66,14 +66,19 @@ router.beforeEach(async (to: any, from: any, next: any) => {
   // 在跳转路由之前，清除所有的请求
   axiosCanceler?.removeAllPending();
 
+  // 1.NProgress 开始
   NProgress.start();
-  // 设置页面标题
+
+  // 2.动态设置标题
   const title = import.meta.env.VITE_GLOB_APP_TITLE;
   document.title = to.meta.title ? `${to.meta.title} - ${title}` : title;
+
   const userStore = useUserStoreWithOut();
   const chatStore = useChatStoreWithOut();
   const globalStore = useGlobalStoreWithOut();
   const hasToken = userStore.hasToken;
+
+  // 3.判断是访问登陆页，有 Token 就在当前页面，没有 Token 重置路由到登陆页
   if (hasToken) {
     if (to.path === LOGIN_URL) {
       next({ path: '/' });
@@ -86,9 +91,12 @@ router.beforeEach(async (to: any, from: any, next: any) => {
     await userStore.$reset();
     await chatStore.$reset();
     await globalStore.$reset();
+
+    // 4.判断访问页面是否在路由白名单地址(静态路由)中，如果存在直接放行
     if (ROUTER_WHITE_LIST.includes(to.path)) {
       next();
     } else {
+      // 5.没有 Token，没有重定向到 login 页面
       next({ path: LOGIN_URL, query: { redirect: to.fullPath } });
       NProgress.done();
     }

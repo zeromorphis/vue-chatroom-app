@@ -17,9 +17,7 @@ export interface ThemeConfigProps {
 
 /* GlobalState */
 export interface GlobalState {
-	lastTime: number;
 	language: string;
-	mobile: boolean;
 	background: string;
 	themeConfig: ThemeConfigProps;
 }

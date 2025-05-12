@@ -8,7 +8,7 @@
 -->
 <template>
   <el-config-provider :locale="locale">
-    <router-view @mouseover="updateLastTime()" @click="updateLastTime()" v-slot="{ Component }">
+    <router-view v-slot="{ Component }">
       <el-watermark id="watermark" :font="font" :content="themeConfig.watermark ? ['言棠', '版权所有'] : ''">
         <keep-alive :include="cacheRouter">
           <component :is="Component" />
@@ -26,7 +26,6 @@ import cacheRouter from "@/router/cacheRouter";
 import { useUserStoreWithOut } from '@/store/modules/user';
 import { useChatStoreWithOut } from '@/store/modules/chat';
 import { useGlobalStoreWithOut } from '@/store/modules/global';
-import { isMobile } from "@/utils/common";
 import { DEFAULT_BACKGROUND, LOGIN_URL } from "@/config/config";
 import { useElementI18n } from "@/hooks/useI18n";
 export default defineComponent({
@@ -42,11 +41,6 @@ export default defineComponent({
     const themeConfig = computed(() => globalStore.themeConfig);
     const font = reactive({ color: "rgba(0, 0, 0, .15)" });
 
-    // 更新用户的最后操作时间
-    const updateLastTime = () => {
-      globalStore.SET_LASTTIME(new Date().getTime());
-    }
-
     // 背景图变更重新存储
     watch(() => globalStore.background, (newVal, oldVal) => {
       if (!newVal || !newVal.trim().length) {
@@ -54,42 +48,9 @@ export default defineComponent({
       }
     }, { immediate: true, deep: true }); // 开启深度监听
 
-    // 判断是否超时
-    const isTimeOut = () => {
-      // 页面上一次的点击时间
-      let lastTime: number = globalStore.lastTime;
-      let currentTime: number = new Date().getTime();
-      let sys_timeout: number = 20 * 60 * 1000;// 超时时间, 如果20分钟都没有点击页面就算超时
-      // 超时了
-      if ((currentTime - lastTime) >= sys_timeout) {
-        return true;
-      } else {
-        return false;
-      }
-    };
-
-    // 是否超时需要自动退出操作
-    const isLoginOut = () => {
-      setInterval(async () => {
-        // 判断一下是否超时，如果超时了就退出
-        if (isTimeOut()) {
-          await userStore.$reset();
-          await chatStore.$reset();
-          await globalStore.$reset();
-          router.push({ path: LOGIN_URL });
-        }
-      }, 2000);
-    };
-
-    onBeforeMount(() => {
-      isLoginOut();//是否超时
-      globalStore.SET_MOBILE(isMobile());
-    });
-
     return {
       locale,
       cacheRouter,
-      updateLastTime,
       themeConfig,
       font,
     };

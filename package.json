@@ -2,6 +2,7 @@
     "name": "vue-app",
     "private": true,
     "version": "3.0.0",
+    "type": "module",
     "description": "vue3 + vite6 + ts + elementPlus + pinia3",
     "author": {
         "name": "言棠",
@@ -69,6 +70,10 @@
         "vite-plugin-pwa": "^1.0.0",
         "vite-plugin-svg-icons": "^2.0.1",
         "vite-plugin-vue-devtools": "^7.7.6",
+        "code-inspector-plugin": "^0.16.1",
         "vue-tsc": "^2.2.10"
+    },
+    "engines": {
+        "node": ">=22.1.0"
     }
 }

@@ -53,7 +53,7 @@ import { useUserStoreWithOut } from '@/store/modules/user';
 import { useChatStoreWithOut } from '@/store/modules/chat';
 import { deleteUserApi } from '@/api/modules/user';
 import { formatTime } from '@/utils/common';
-import { ElNotification } from "element-plus";
+import { ElMessage } from "element-plus";
 export default defineComponent({
   name: "GenalAvatar",
   props: {
@@ -96,19 +96,9 @@ export default defineComponent({
     async function deleteUser(userId: string) {
       try {
         let res = await deleteUserApi({ uid: userinfo.value.userId, psw: userinfo.value.password, did: userId });
-        ElNotification({
-          title: 'Success',
-          message: res.msg,
-          type: "success",
-          duration: 1500
-        });
+        ElMessage.success(res.msg);
       } catch (error) {
-        ElNotification({
-          title: "Error",
-          message: error.msg,
-          type: "error",
-          duration: 1500
-        });
+        ElMessage.error(error.msg);
       }
     }
 

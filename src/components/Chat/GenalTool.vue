@@ -37,7 +37,7 @@
               <span>更换头像</span>
             </div>
           </el-upload>
-          <loading-outlined class="loading" v-if="uploading" spin />
+          <el-icon class="loading" v-if="uploading"><Loading /></el-icon>
         </div>
         <div class="tool-user-info">
           <div class="tool-user-title">更改用户名</div>
@@ -82,14 +82,13 @@
 
 <script lang="ts">
 import { ref, reactive, onBeforeMount, computed, toRefs, defineComponent, SetupContext } from "vue";
-import { BulbOutlined, SkinOutlined, PoweroffOutlined, InfoCircleOutlined, UploadOutlined, LoadingOutlined } from '@ant-design/icons-vue';
 import { useUserStoreWithOut } from '@/store/modules/user';
 import { useChatStoreWithOut } from '@/store/modules/chat';
 import { useGlobalStoreWithOut } from '@/store/modules/global';
 import { nameVerify, passwordVerify } from '@/utils/common';
 import { setUserAvatarApi, patchUserNameApi, patchPasswordApi } from '@/api/modules/user';
 import { DEFAULT_BACKGROUND, DEFAULT_GROUP_ID } from '@/config/config';
-import { ElNotification } from "element-plus";
+import { ElMessage } from "element-plus";
 import md5 from "js-md5";
 interface FormState {
   username: string;
@@ -100,14 +99,6 @@ interface FormState {
 }
 export default defineComponent({
   name: "GenalTool",
-  components: {
-    BulbOutlined,
-    SkinOutlined,
-    PoweroffOutlined,
-    InfoCircleOutlined,
-    UploadOutlined,
-    LoadingOutlined
-  },
   emits: ['logout'],
   setup(props, content: SetupContext) {
     const useUserStore = useUserStoreWithOut();
@@ -178,22 +169,12 @@ export default defineComponent({
     function beforeUpload(file: any) {
       const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/jpg' || file.type === 'image/gif';
       if (!isJpgOrPng) {
-        ElNotification({
-          title: 'Error',
-          message: "请上传jpeg/jpg/png/gif格式的图片!",
-          type: "error",
-          duration: 1500
-        });
+        ElMessage.error("请上传jpeg/jpg/png/gif格式的图片!");
         return;
       }
       const isLt1M = file.size / 1024 / 1024 < 0.5;
       if (!isLt1M) {
-        ElNotification({
-          title: 'Error',
-          message: "图片必须小于500K!",
-          type: "error",
-          duration: 1500
-        });
+        ElMessage.error("图片必须小于500K!");
         return;
       }
       formState.avatar = file;
@@ -218,19 +199,9 @@ export default defineComponent({
           userId: res.data.userId,
         });
         showUserModal.value = false;
-        ElNotification({
-          title: 'Success',
-          message: res.msg,
-          type: "success",
-          duration: 1500
-        });
+        ElMessage.success(res.msg);
       }).catch((err: any) => {
-        ElNotification({
-          title: 'Error',
-          message: err.msg,
-          type: "error",
-          duration: 1500
-        });
+        ElMessage.error(err.msg);
       });
     }
 
@@ -249,19 +220,9 @@ export default defineComponent({
           userId: res.data.userId,
         });
         showUserModal.value = false;
-        ElNotification({
-          title: 'Success',
-          message: res.msg,
-          type: "success",
-          duration: 1500
-        });
+        ElMessage.success(res.msg);
       }).catch((err: any) => {
-        ElNotification({
-          title: 'Error',
-          message: err.msg,
-          type: "error",
-          duration: 1500
-        });
+        ElMessage.error(err.msg);
       });
     }
 
@@ -276,19 +237,9 @@ export default defineComponent({
         useChatStore.SET_USER_GATHER(res.data);
         showUserModal.value = false;
         formState.password = '';
-        ElNotification({
-          title: 'Success',
-          message: res.msg,
-          type: "success",
-          duration: 1500
-        });
+        ElMessage.success(res.msg);
       } catch (err: any) {
-        ElNotification({
-          title: 'Error',
-          message: err.msg,
-          type: "error",
-          duration: 1500
-        });
+        ElMessage.error(err.msg);
       }
     }
 

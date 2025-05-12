@@ -41,7 +41,7 @@ import { useChatStoreWithOut } from '@/store/modules/chat';
 import { useGlobalStoreWithOut } from '@/store/modules/global';
 import GenalEmoji from './GenalEmoji.vue';
 import { throttle } from 'throttle-debounce';
-import { ElNotification } from "element-plus";
+import { ElMessage } from "element-plus";
 export default defineComponent({
   name: "GenalInput",
   components: {
@@ -94,21 +94,11 @@ export default defineComponent({
     // 消息发送前校验-节流
     const preSendMessage = throttle(1000, () => {
       if (!text.value.trim()) {
-        ElNotification({
-          title: 'Error',
-          message: "不能发送空消息!",
-          type: "error",
-          duration: 1500
-        });
+        ElMessage.error("不能发送空消息!");
         return;
       }
       if (text.value.length > 220) {
-        ElNotification({
-          title: 'Error',
-          message: "消息太长!",
-          type: "error",
-          duration: 1500
-        });
+        ElMessage.error("消息太长!");
         return;
       }
       if (activeRoom.value.groupId) {

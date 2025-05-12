@@ -18,7 +18,7 @@ const mainRouter: Array<RouteRecordRaw> = [
 		component: () => import("@/views/chat/index.vue"),
 		meta: {
 			title: "聊天室",
-			requiresAuth: false,
+			requiresAuth: true,
 			keepAlive: true,
 		}
 	},

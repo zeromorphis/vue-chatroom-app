@@ -44,6 +44,7 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       preprocessorOptions: {
         scss: {
           charset: false,
+          additionalData: `@use "@/styles/var.scss" as *;`
         },
         less: {
           charset: false,

@@ -12,7 +12,7 @@ import type { UserState } from "../interface";
 import type { Login } from "@/api/interface";
 import piniaPersistConfig from "../utils/piniaPersist";
 import { loginApi, registerApi } from "@/api/modules/auth";
-import { message } from "ant-design-vue";
+import { ElMessage } from "element-plus";
 
 export const useUserStore = defineStore("user", {
   state: (): UserState => {
@@ -54,7 +54,7 @@ export const useUserStore = defineStore("user", {
         this.SET_USERINFO(res.data);
         return res;
       } catch (error: any) {
-        message.error(error.msg);
+        ElMessage.error(error.msg);
         return Promise.reject(error);
       }
     },
@@ -66,7 +66,7 @@ export const useUserStore = defineStore("user", {
         this.SET_USERINFO(res.data);
         return res;
       } catch (error: any) {
-        message.error(error.msg);
+        ElMessage.error(error.msg);
         return Promise.reject(error);
       }
     },

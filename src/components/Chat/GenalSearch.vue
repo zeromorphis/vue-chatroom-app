@@ -74,7 +74,7 @@ import { useChatStoreWithOut } from '@/store/modules/chat';
 import { getGroupsByNameApi } from "@/api/modules/group";
 import { getUsersByNameApi } from "@/api/modules/user";
 import { nameVerify, isContainStr } from '@/utils/common';
-import { ElNotification } from "element-plus";
+import { ElMessage } from "element-plus";
 export default defineComponent({
   name: "GenalSearch",
   emits: ['setActiveRoom', 'addGroup', 'joinGroup', 'addFriend'],
@@ -144,12 +144,7 @@ export default defineComponent({
       getGroupsByNameApi(value).then((res: any) => {
         groupArr.value = res.data;
       }).catch((err: any) => {
-        ElNotification({
-          title: 'Error',
-          message: err.msg,
-          type: "error",
-          duration: 1500
-        });
+        ElMessage.error(err.msg);
       });
     }
 
@@ -172,12 +167,7 @@ export default defineComponent({
       getUsersByNameApi(value).then((res: any) => {
         userArr.value = res.data;
       }).catch((err: any) => {
-        ElNotification({
-          title: 'Error',
-          message: err.msg,
-          type: "error",
-          duration: 1500
-        });
+        ElMessage.error(err.msg);
       });
     }
 

@@ -11,15 +11,12 @@ import { store } from "@/store";
 import { getLocale } from "@/locales";
 import { GlobalState, ThemeConfigProps } from "../interface";
 import piniaPersistConfig from "../utils/piniaPersist";
-import { isMobile } from "@/utils/common";
 import { DEFAULT_PRIMARY } from "@/config/config";
 
 export const useGlobalStore = defineStore("global", {
   state: (): GlobalState => {
     return {
-      lastTime: new Date().getTime(),
       language: getLocale(),
-      mobile: isMobile(),
       background: "",
       themeConfig: {
         // 深色模式
@@ -36,14 +33,8 @@ export const useGlobalStore = defineStore("global", {
     };
   },
   actions: {
-    SET_LASTTIME(lastTime: number) {
-      this.lastTime = lastTime;
-    },
     SET_LANGUAGE(language: string) {
       this.language = language;
-    },
-    SET_MOBILE(payload: boolean) {
-      this.mobile = payload;
     },
     SET_BACKGROUND(payload: string) {
       this.background = payload;
